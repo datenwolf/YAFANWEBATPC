@@ -1,29 +1,3 @@
-/*
- * ---------------- www.spacesimulator.net --------------
- *   ---- Space simulators and 3d engine tutorials ----
- *
- * Author: Damiano Vitulli
- *
- * This program is released under the BSD licence
- * By using this program you agree to licence terms on spacesimulator.net copyright page
- *
- *
- * Tutorial 6: Matrices and multi-objects loading
- * 
- * 
- *
- * To compile this project you must include the following libraries:
- * opengl32.lib,glu32.lib,glut32.lib
- * You need also the header file glut.h in your compiler directory.
- *  
- */
-
-/*
- * Spaceships credits:
- * fighter1.3ds - created by: Dario Vitulli 
- * fighter2.3ds - taken from http://www.3dcafe.com/asp/meshes.asp
- * fighter3.3ds - created by: Rene Reiter <renereiter@hotmail.com>
- */
 
 #include <GL/glut.h>
 #include <stdlib.h>

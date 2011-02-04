@@ -1,26 +1,3 @@
-/*
- * ---------------- www.spacesimulator.net --------------
- *   ---- Space simulators and 3d engine tutorials ----
- *
- * Author: Damiano Vitulli
- *
- * This program is released under the BSD licence
- * By using this program you agree to licence terms on spacesimulator.net copyright page
- *
- *
- * Tutorial 4: 3d engine - 3ds models loader
- * 
- * File header: 3dsloader.h
- *  
- */
-
-/*
-Linux port by Panteleakis Ioannis
-mail: pioann@csd.auth.gr
-
-just run: make and you are done.
-of course you may need to change the makefile
-*/
 #include "object.h"
 
 
