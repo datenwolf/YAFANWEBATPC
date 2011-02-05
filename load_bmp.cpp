@@ -99,3 +99,24 @@ int LoadBMP(char *filename)
 
     return (num_texture); // Returns the current texture OpenGL ID
 }
+int registerTexture(char *data,int biWidth,int biHeight)
+{
+    num_texture++; // The counter of the current texture is increased
+    glBindTexture(GL_TEXTURE_2D, num_texture); // Bind the ID texture specified by the 2nd parameter
+
+    // The next commands sets the texture parameters
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // If the u,v coordinates overflow the range 0,1 the image is repeated
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // The magnification function ("linear" produces better results)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); //The minifying function
+
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_SMOOTH); // We combine the texture map color with the original surface color.
+
+    // Finally we define the 2d texture
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, biWidth, biHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+    // And create 2d mipmaps for the minifying function
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 3, biWidth, biHeight, GL_RGB, GL_UNSIGNED_BYTE, data);
+    
+    return (num_texture); // Returns the current texture OpenGL ID
+}

@@ -19,6 +19,8 @@ extern int num_texture;
  *********************************************************/
 
 extern int LoadBMP(char *filename);
+int registerTexture(char *data,int biWidth,int biHeight);
+
 
 typedef struct                       /**** BMP file info structure ****/
     {
