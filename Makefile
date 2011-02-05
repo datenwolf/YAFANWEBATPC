@@ -13,7 +13,7 @@ CC = gcc $(OPT) -Wall
 
 # You might have to change GLU to MesaGLU depending on your Mesa version
 GLLIBS = $(MAINLIB) -lGL -lGLU -I/usr/X11R6/include -L/usr/X11R6/lib
-LIBS = $(GLLIBS) -lm
+LIBS = $(GLLIBS) -lm -L/usr/local/lib -lenet -I/usr/local/include
 
 all: yafanwebatpc
 
