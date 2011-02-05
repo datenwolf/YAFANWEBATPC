@@ -1,0 +1,5 @@
+for Enet library:
+1) run configure
+2) run make
+3) run make install
+done.
