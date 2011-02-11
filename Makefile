@@ -5,7 +5,7 @@ SRC = *.cpp
 
 OBJ = $(SRC:.c=.o)
 
-OPT = -g -O3 -DVERSION="\"$(shell git show | head -n 1 | cut -d" " -f 2)-$(shell date +"%s")\""
+OPT = -g -O3 -DVERSION="\"$(shell date +"%s")::$(shell git show | head -n 1 | cut -d" " -f 2)\""
 CC = gcc $(OPT) -Wall
 
 # You might have to change GLU to MesaGLU depending on your Mesa version

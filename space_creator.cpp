@@ -31,4 +31,5 @@ std::vector<space_object> space_create_tree(std::vector<space_object> in,
 		in.push_back(tmp);
 		return in;
 	}
+  return in;
 }

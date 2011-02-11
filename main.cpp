@@ -26,6 +26,7 @@
 
 int main(int argc, char **argv)
 {
+    srand(time(NULL));
 #ifdef RUN_TESTS
     printf("This is YAFANWEBATPC version %s, running the test suite.\n",VERSION);
     return tests_run_suite(argc,argv);
