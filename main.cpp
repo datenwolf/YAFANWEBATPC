@@ -23,10 +23,13 @@
 
 int main(int argc, char **argv)
 {
+#ifdef RUN_TESTS
+    printf("Hello!\nThis is YAFANWEBATPC version %s\n",VERSION);
+#else
     // We use the GLUT utility to initialize the window, to handle the input and to interact with the window system
     glutInit(&argc, argv);    
     gl_render_engine_init();
     glutMainLoop();
-
+#endif
     return(0);    
 }
