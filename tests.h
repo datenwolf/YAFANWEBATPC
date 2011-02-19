@@ -10,7 +10,7 @@
 
 extern const int test_function_count;
 extern int (*test_functions[])(int);
-extern int tests_run_suite(int argc,char** argv);
+extern int tests_run_suite(int* argc,char** argv);
 
 //tests
 extern int test_dummy(int);

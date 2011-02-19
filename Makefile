@@ -12,15 +12,19 @@ CC = gcc $(OPT) -Wall
 GLLIBS = -lglut -lGL -lGLU -I/usr/X11R6/include -L/usr/X11R6/lib
 LIBS = $(GLLIBS) -lm -L/usr/local/lib -lenet -I/usr/local/include
 
-all: yafanwebatpc tests
+all: yafanwebatpc tests server
 
 .c.o:
 	$(CC) -c $<
 
 yafanwebatpc: $(OBJ)
 	$(CC) -o $@ $^ $(LIBS)
+
 tests: $(OBJ)
 	$(CC) -DRUN_TESTS -o $@ $^ $(LIBS)
 
+server: $(OBJ)
+	$(CC) -DRUN_SERVER -o $@ $^ $(LIBS)
+
 clean:
-	rm -f yafanwebatpc *.o
+	rm -f yafanwebatpc tests server *.o

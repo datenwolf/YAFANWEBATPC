@@ -5,7 +5,7 @@
 const int test_function_count=3;
 int (*test_functions[test_function_count])(int) = {&test_dummy,&test_space_creator,&test_dummy};
 
-int tests_run_suite(int argc,char** argv){
+int tests_run_suite(int* argc,char** argv){
   int idx;
   int tmp=RET_NO_RETURN;
   for(idx=0;idx<test_function_count;idx++){
@@ -26,20 +26,8 @@ int test_space_creator(int x) {
   std::vector<space_object> vtest1;
   std::vector<space_object> vtest2;
   vtest2=space_create_tree(vtest1,(unsigned int)0,true);
-//  space_object test1=vtest1[0];
   space_object test2=vtest2[0];
-/*  printf("VTEST1:\n");
-  printf("  id:      %i\n",test1.id);
-  printf("  parent:  %i\n",test1.parent);
-  printf("  x:       %f\n",test1.x);
-  printf("  y:       %f\n",test1.y);
-  printf("  z:       %f\n",test1.z);
-  printf("  rotx:    %i\n",test1.rotx);
-  printf("  roty:    %i\n",test1.roty);
-  printf("  rotz:    %i\n",test1.rotz);
-  printf("  model:   %s\n",test1.model);
-  printf("  texname: %s\n",test1.texname);*/
-  printf("VTEST2:\n");
+  printf("VTEST2[0]:\n");
   printf("  id:      %i\n",test2.id);
   printf("  parent:  %i\n",test2.parent);
   printf("  x:       %f\n",test2.x);

@@ -1,2 +1,2 @@
 //client header
-void gl_render_engine_init(void);
+int gl_render_engine_init(int* argc,char** argv);
