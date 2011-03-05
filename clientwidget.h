@@ -21,11 +21,14 @@ protected:
      void initializeGL();
      void resizeGL(int w, int h);
      void paintGL();
+private:
      float x;
      bool xdir;
      QList<QPolygonF> poly;
+     int frames;
 protected slots:
      void animate();
+     void fpscalc();
 
 };
 

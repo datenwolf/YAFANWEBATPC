@@ -1,15 +1,21 @@
 #include "clientwidget.h"
 #include <QTimer>
 
+QList<QPolygonF> text2polylist(char* font, int size, QString str){
+    QPainterPath path;
+    path.addText(QPointF(0, 0), QFont(font, size), QString(str));
+    return path.toSubpathPolygons();
+}
+
+
+
 ClientWidget::ClientWidget(QGLWidget *parent)
     : QGLWidget(parent)
 {
     qDebug()<<"widget init";
     x=0.0;xdir=false;
-    QPainterPath path;
-    path.addText(QPointF(0, 0), QFont("Arial", 40), QString(tr("Hello")));
-    poly = path.toSubpathPolygons();
-
+    frames=0;
+    poly=text2polylist("Arial",40,tr("FPS"));
 }
 
 ClientWidget::~ClientWidget()
@@ -30,6 +36,9 @@ void ClientWidget::initializeGL()
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
     timer->start(10);
+    QTimer *timer2 = new QTimer(this);
+    connect(timer2, SIGNAL(timeout()), this, SLOT(fpscalc()));
+    timer2->start(1000);
     qDebug()<<"gl init done";
 }
 
@@ -43,6 +52,7 @@ void ClientWidget::resizeGL(int w, int h)
 
 void ClientWidget::paintGL()
 {
+    frames+=1;
     qDebug()<<"gl paint start";
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
     glLoadIdentity();					// Reset The Current Modelview Matrix
@@ -58,14 +68,14 @@ void ClientWidget::paintGL()
         glBegin(GL_LINE_LOOP);
         glColor3f(1,1,1);
         for (QPolygonF::iterator p = (*i).begin(); p != i->end(); p++)
-            glVertex3f(p->rx()*0.01f-0.5f, -p->ry()*0.01f, 0.0f);
+            glVertex3f(p->rx()*0.01f-0.3f, -p->ry()*0.01f, 0.0f);
         glEnd();
     }
     for (QList<QPolygonF>::iterator i = poly.begin(); i != poly.end(); i++){
         glBegin(GL_LINE_LOOP);
         for (QPolygonF::iterator p = (*i).begin(); p != i->end(); p++){
             glColor4f(1,1,1,p->ry()*0.05f+1);
-            glVertex3f(p->rx()*0.01f-0.5f, p->ry()*0.01f-0.1f, 0.0f);
+            glVertex3f(p->rx()*0.01f-0.3f, p->ry()*0.01f-0.1f, 0.0f);
         }
         glEnd();
     }
@@ -88,4 +98,11 @@ void ClientWidget::animate()
     }
     updateGL();
     qDebug()<<"animate() end";
+}
+void ClientWidget::fpscalc()
+{
+    qDebug()<<"fpscalc()";
+    qDebug()<<"FPS: "<<frames;
+    poly=text2polylist("Arial",40,QString::number(frames));
+    frames=0;
 }
