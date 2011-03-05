@@ -6,6 +6,10 @@ ClientWidget::ClientWidget(QGLWidget *parent)
 {
     qDebug()<<"widget init";
     x=0.0;xdir=false;
+    QPainterPath path;
+    path.addText(QPointF(0, 0), QFont("Arial", 40), QString(tr("Hello")));
+    poly = path.toSubpathPolygons();
+
 }
 
 ClientWidget::~ClientWidget()
@@ -18,7 +22,10 @@ void ClientWidget::initializeGL()
     qDebug()<<"gl init";
     glClearColor(0.5, 0.5, 0.5, 0.0);
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);							// The Type Of Depth Test To Do
+    glDepthFunc(GL_LEQUAL);         // The Type Of Depth Test To Do
+    glDisable(GL_LIGHTING);
+    glEnable(GL_BLEND);
+        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glShadeModel(GL_SMOOTH);						// Enables Smooth Shading
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
@@ -47,6 +54,21 @@ void ClientWidget::paintGL()
     glColor3f(x,x,1.0f-x);			// Set The Color To Blue
     glVertex3f( 1.0f,-1.0f, 0.0f);			// Right And Down One Unit (Bottom Right)
     glEnd();						// Done Drawing A Triangle
+    for (QList<QPolygonF>::iterator i = poly.begin(); i != poly.end(); i++){
+        glBegin(GL_LINE_LOOP);
+        glColor3f(1,1,1);
+        for (QPolygonF::iterator p = (*i).begin(); p != i->end(); p++)
+            glVertex3f(p->rx()*0.01f-0.5f, -p->ry()*0.01f, 0.0f);
+        glEnd();
+    }
+    for (QList<QPolygonF>::iterator i = poly.begin(); i != poly.end(); i++){
+        glBegin(GL_LINE_LOOP);
+        for (QPolygonF::iterator p = (*i).begin(); p != i->end(); p++){
+            glColor4f(1,1,1,p->ry()*0.05f+1);
+            glVertex3f(p->rx()*0.01f-0.5f, p->ry()*0.01f-0.1f, 0.0f);
+        }
+        glEnd();
+    }
     qDebug()<<"gl paint end";
 }
 void ClientWidget::animate()

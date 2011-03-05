@@ -4,6 +4,9 @@
 #include <QtGui/QWidget>
 #include <QGLWidget>
 #include <QDebug>
+#include <QPainterPath>
+#include <QList>
+#include <QPolygonF>
 
 class ClientWidget : public QGLWidget
 {
@@ -20,6 +23,7 @@ protected:
      void paintGL();
      float x;
      bool xdir;
+     QList<QPolygonF> poly;
 protected slots:
      void animate();
 
