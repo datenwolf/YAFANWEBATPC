@@ -11,6 +11,15 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        clientwidget.cpp
+        clientwidget.cpp \
+    spaceobject.cpp
 
-HEADERS  += clientwidget.h
+HEADERS  += clientwidget.h \
+    spaceobject.h
+
+CONFIG(debug, debug|release) {
+# here comes debug specific statements
+} else {
+# here comes release specific statements
+DEFINES += QT_NO_DEBUG_OUTPUT
+}

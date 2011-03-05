@@ -75,10 +75,34 @@ void ClientWidget::paintGL()
         glBegin(GL_LINE_LOOP);
         for (QPolygonF::iterator p = (*i).begin(); p != i->end(); p++){
             glColor4f(1,1,1,p->ry()*0.05f+1);
-            glVertex3f(p->rx()*0.01f-0.3f, p->ry()*0.01f-0.1f, 0.0f);
+            glVertex3f(p->rx()*0.01f-0.3f-(p->ry()*0.01f), p->ry()*0.01f-0.1f, 0.0f);
         }
         glEnd();
     }
+    glBegin(GL_LINE);
+    glColor4f(1.0f,0.0f,0.0f,0.5f);
+    glVertex3f( 0.1f, 0.1f, 0.0f);
+    glVertex3f(-0.1f,-0.1f, 0.0f);
+    glVertex3f( 0.1f,-0.1f, 0.0f);
+    glVertex3f( -0.1f, 0.1f, 0.0f);
+
+    glColor4f(0.0f,1.0f,0.0f,0.75f);
+    glVertex3f(-1.0f, -0.5f, 0.0f);
+    glVertex3f(1.0f,-0.5f, 0.0f);
+
+    glColor4f(0.0f,1.0f,0.0f,0.5f);
+    glVertex3f(-1.0f, -0.75f, 0.0f);
+    glVertex3f(1.0f,-0.75f, 0.0f);
+    glVertex3f(0.0f, -0.5f, 0.0f);
+    glVertex3f(0.0f,-1.0f, 0.0f);
+
+    glColor4f(0.0f,1.0f,0.0f,0.25f);
+    glVertex3f(-1.0f, -0.5f, 0.0f);
+    glVertex3f(0.0f,-0.75f, 0.0f);
+    glVertex3f(1.0f, -0.5f, 0.0f);
+    glVertex3f(0.0f,-0.75f, 0.0f);
+
+    glEnd();
     qDebug()<<"gl paint end";
 }
 void ClientWidget::animate()

@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 {
     qDebug()<<"main init";
     QApplication a(argc, argv);
-    qDebug()<<"qapp";
+    qDebug()<<"qapp"<<qApp->arguments().join(",");
     ClientWidget w;
     qDebug()<<"widget created";
     w.show();
