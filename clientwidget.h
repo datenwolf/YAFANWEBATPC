@@ -18,6 +18,10 @@ protected:
      void initializeGL();
      void resizeGL(int w, int h);
      void paintGL();
+     float x;
+     bool xdir;
+protected slots:
+     void animate();
 
 };
 
