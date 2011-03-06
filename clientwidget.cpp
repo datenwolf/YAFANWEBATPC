@@ -17,7 +17,7 @@ ClientWidget::ClientWidget(QGLWidget *parent)
 {
     qDebug()<<"widget init";
     frames=0;
-    fpslabel.setStyleSheet("QLabel { background: transparent; color : white; }");
+    fpslabel.setStyleSheet("QLabel { background: transparent; color : white; font-size: 32px; }");
     fpscalc();
     led1ON=false;
     for(float t = 0; t <= 6.28f; t += 0.06f){
