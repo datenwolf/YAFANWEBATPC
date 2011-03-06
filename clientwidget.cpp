@@ -201,10 +201,6 @@ void ClientWidget::fpscalc()
     fpspix.fill(QColor("transparent"));
     fpslabel.render(&fpspix,QPoint(),QRegion(),RenderFlags(!DrawWindowBackground));
     deleteTexture(fpstex);
-    if(fpspix.hasAlpha()){
-        fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGBA);
-    }else{
-        fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGB);
-    }
+    fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGBA);
     frames=0;
 }
