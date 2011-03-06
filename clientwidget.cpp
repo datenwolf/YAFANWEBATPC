@@ -58,6 +58,10 @@ void ClientWidget::initializeGL()
     QTimer *timer2 = new QTimer(this);
     connect(timer2, SIGNAL(timeout()), this, SLOT(fpscalc()));
     timer2->start(500);
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity();
+    glScalef(1.0, -1.0, 1.0);
+    glMatrixMode(GL_MODELVIEW);
     qDebug()<<"gl init done";
 }
 void ClientWidget::drawHUD()
