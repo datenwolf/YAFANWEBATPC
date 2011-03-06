@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     qDebug()<<"qapp"<<qApp->arguments().join(",");
     ClientWidget w;
     qDebug()<<"widget created";
-    w.show();
+    w.showFullScreen();
     qDebug()<<"widget shown";
 
 

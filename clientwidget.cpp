@@ -26,12 +26,14 @@ ClientWidget::~ClientWidget()
 void ClientWidget::initializeGL()
 {
     qDebug()<<"gl init";
-    glClearColor(0.5, 0.5, 0.5, 0.0);
+    glClearColor(0, 0, 0, 0.0);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);         // The Type Of Depth Test To Do
     glDisable(GL_LIGHTING);
+    glEnable(GL_POINT_SMOOTH);
+    glPointSize(1.0);
     glEnable(GL_BLEND);
-        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glShadeModel(GL_SMOOTH);						// Enables Smooth Shading
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
@@ -45,8 +47,15 @@ void ClientWidget::initializeGL()
 void ClientWidget::resizeGL(int w, int h)
 {
     qDebug()<<"gl resize";
+    glMatrixMode(GL_PROJECTION);
     glViewport(0, 0, (GLint)w, (GLint)h);
-    gluPerspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100.0f);
+    gluPerspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100000.0f);
+    glMatrixMode(GL_MODELVIEW);
+    gluLookAt(0.0, 0.0, 0.0,
+      0.0, 0.0, 1.0,
+      0.0, 1.0, 0.0);
+    glPushMatrix();
+    glMatrixMode(GL_PROJECTION);
     qDebug()<<"gl resize done";
 }
 
@@ -56,51 +65,59 @@ void ClientWidget::paintGL()
     qDebug()<<"gl paint start";
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
     glLoadIdentity();					// Reset The Current Modelview Matrix
+    qsrand(0);
+    glBegin(GL_POINTS);
+    glColor3f(1,1,1);
+    for (int i=0;i<100;i++)
+    {
+        glVertex3f(((float)(qrand()%100-50))/50.0f,((float)(qrand()%100-50))/50.0f,1);
+    }
+    glEnd();
     glBegin(GL_TRIANGLES);					// Begin Drawing Triangles
-    glColor3f(1.0f-x,x,x);			// Set The Color To Red
-    glVertex3f( 0.0f, 1.0f, 0.0f);			// Move Up One Unit From Center (Top Point)
-    glColor3f(x,1.0f-x,x);			// Set The Color To Green
-    glVertex3f(-1.0f,-1.0f, 0.0f);			// Left And Down One Unit (Bottom Left)
-    glColor3f(x,x,1.0f-x);			// Set The Color To Blue
-    glVertex3f( 1.0f,-1.0f, 0.0f);			// Right And Down One Unit (Bottom Right)
+    glColor4f(1.0f-x,x,x,1);			// Set The Color To Red
+    glVertex3f( 0.0f, 1.0f, 1.0f);			// Move Up One Unit From Center (Top Point)
+    glColor4f(x,1.0f-x,x,1);			// Set The Color To Green
+    glVertex3f(-1.0f,-1.0f, 1.0f);			// Left And Down One Unit (Bottom Left)
+    glColor4f(x,x,1.0f-x,1);			// Set The Color To Blue
+    glVertex3f( 1.0f,-1.0f, 1.0f);			// Right And Down One Unit (Bottom Right)
     glEnd();						// Done Drawing A Triangle
     for (QList<QPolygonF>::iterator i = poly.begin(); i != poly.end(); i++){
         glBegin(GL_LINE_LOOP);
         glColor3f(1,1,1);
         for (QPolygonF::iterator p = (*i).begin(); p != i->end(); p++)
-            glVertex3f(p->rx()*0.01f-0.3f, -p->ry()*0.01f, 0.0f);
+            glVertex3f(p->rx()*0.01f-0.3f, -p->ry()*0.01f, 1.0f);
         glEnd();
     }
     for (QList<QPolygonF>::iterator i = poly.begin(); i != poly.end(); i++){
         glBegin(GL_LINE_LOOP);
         for (QPolygonF::iterator p = (*i).begin(); p != i->end(); p++){
             glColor4f(1,1,1,p->ry()*0.05f+1);
-            glVertex3f(p->rx()*0.01f-0.3f-(p->ry()*0.01f), p->ry()*0.01f-0.1f, 0.0f);
+            glVertex3f(p->rx()*0.01f-0.3f-(p->ry()*0.01f), p->ry()*0.01f-0.1f, 1.0f);
         }
         glEnd();
     }
     glBegin(GL_LINE);
     glColor4f(1.0f,0.0f,0.0f,0.5f);
-    glVertex3f( 0.1f, 0.1f, 0.0f);
-    glVertex3f(-0.1f,-0.1f, 0.0f);
-    glVertex3f( 0.1f,-0.1f, 0.0f);
-    glVertex3f( -0.1f, 0.1f, 0.0f);
+    glVertex3f(  0.1f,    0.1f,     1.0f);
+    glVertex3f( -0.1f,   -0.1f,     1.0f);
+    glVertex3f(  0.1f,   -0.1f,     1.0f);
+    glVertex3f( -0.1f,    0.1f,     1.0f);
 
     glColor4f(0.0f,1.0f,0.0f,0.75f);
-    glVertex3f(-1.0f, -0.5f, 0.0f);
-    glVertex3f(1.0f,-0.5f, 0.0f);
+    glVertex3f( -1.0f,   -0.5f,     1.0f);
+    glVertex3f(  1.0f,   -0.5f,     1.0f);
 
     glColor4f(0.0f,1.0f,0.0f,0.5f);
-    glVertex3f(-1.0f, -0.75f, 0.0f);
-    glVertex3f(1.0f,-0.75f, 0.0f);
-    glVertex3f(0.0f, -0.5f, 0.0f);
-    glVertex3f(0.0f,-1.0f, 0.0f);
+    glVertex3f( -1.0f,   -0.75f,    1.0f);
+    glVertex3f(  1.0f,   -0.75f,    1.0f);
+    glVertex3f(  0.0f,   -0.5f,     1.0f);
+    glVertex3f(  0.0f,   -1.0f,     1.0f);
 
     glColor4f(0.0f,1.0f,0.0f,0.25f);
-    glVertex3f(-1.0f, -0.5f, 0.0f);
-    glVertex3f(0.0f,-0.75f, 0.0f);
-    glVertex3f(1.0f, -0.5f, 0.0f);
-    glVertex3f(0.0f,-0.75f, 0.0f);
+    glVertex3f( -1.0f,   -0.5f,     1.0f);
+    glVertex3f(  0.0f,   -0.75f,    1.0f);
+    glVertex3f(  1.0f,   -0.5f,     1.0f);
+    glVertex3f(  0.0f,   -0.75f,    1.0f);
 
     glEnd();
     qDebug()<<"gl paint end";
