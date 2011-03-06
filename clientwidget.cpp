@@ -1,6 +1,7 @@
 #include "clientwidget.h"
 #include <QTimer>
 #include <math.h>
+#include <QDateTime>
 
 QList<QPolygonF> text2polylist(char* font, int size, QString str){
     QPainterPath path;
@@ -15,7 +16,7 @@ ClientWidget::ClientWidget(QGLWidget *parent)
 {
     qDebug()<<"widget init";
     frames=0;
-    led1ON=false;led1count=0;
+    led1ON=false;
     poly=text2polylist("Arial",1,tr("FPS"));
     for(float t = 0; t <= 6.28f; t += 0.06f){
         radar.append(QPointF(0.4f * cos(t), 0.2f * sin(t) -0.8f));
@@ -51,7 +52,7 @@ void ClientWidget::initializeGL()
     glShadeModel(GL_SMOOTH);						// Enables Smooth Shading
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
-    timer->start(10);
+    timer->start(20);
     QTimer *timer2 = new QTimer(this);
     connect(timer2, SIGNAL(timeout()), this, SLOT(fpscalc()));
     timer2->start(500);
@@ -183,11 +184,7 @@ void ClientWidget::paintGL()
 void ClientWidget::animate()
 {
     qDebug()<<"animate() start";
-    led1count++;
-    if(led1count>=20){
-        led1count=0;
-        led1ON=!led1ON;
-    }
+    led1ON=QDateTime::currentDateTime().toTime_t()%2;
     updateGL();
     qDebug()<<"animate() end";
 }

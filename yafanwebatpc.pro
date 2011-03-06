@@ -19,7 +19,9 @@ HEADERS  += clientwidget.h \
 
 CONFIG(debug, debug|release) {
 # here comes debug specific statements
+QMAKE_CXXFLAGS += -g -pg
 } else {
 # here comes release specific statements
 DEFINES += QT_NO_DEBUG_OUTPUT
+QMAKE_CXXFLAGS += -O3
 }

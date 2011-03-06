@@ -31,7 +31,6 @@ private:
      QPointF radar_tl;
      QPointF radar_tr;
      bool led1ON;
-     int led1count;
 protected slots:
      void animate();
      void fpscalc();
