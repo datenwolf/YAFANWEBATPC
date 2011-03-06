@@ -2,6 +2,7 @@
 #include <QTimer>
 #include <math.h>
 #include <QDateTime>
+#include <QBitmap>
 
 QList<QPolygonF> text2polylist(char* font, int size, QString str){
     QPainterPath path;
@@ -16,6 +17,7 @@ ClientWidget::ClientWidget(QGLWidget *parent)
 {
     qDebug()<<"widget init";
     frames=0;
+    fpslabel.setStyleSheet("QLabel { background: transparent; color : white; }");
     fpscalc();
     led1ON=false;
     for(float t = 0; t <= 6.28f; t += 0.06f){
@@ -194,16 +196,15 @@ void ClientWidget::fpscalc()
     qDebug()<<"fpscalc()";
     qDebug()<<"FPS: "<<frames*2;
     fpslabel.setText(QString::number(frames*2).append(" FPS"));
-    fpslabel.resize(64,32);
-    fpslabel.setStyleSheet("QLabel { color : white; }");
+    fpslabel.resize(fpslabel.sizeHint());
     fpspix=QPixmap(fpslabel.size());
+    fpspix.fill(QColor("transparent"));
     fpslabel.render(&fpspix,QPoint(),QRegion(),RenderFlags(!DrawWindowBackground));
     deleteTexture(fpstex);
-    if(fpspix.hasAlphaChannel()){
+    if(fpspix.hasAlpha()){
         fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGBA);
     }else{
         fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGB);
     }
-    //QWidget::render ( QPaintDevice * target, const QPoint & targetOffset = QPoint(), const QRegion & sourceRegion = QRegion(), RenderFlags renderFlags = RenderFlags( DrawWindowBackground | DrawChildren ) )
     frames=0;
 }
