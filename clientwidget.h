@@ -21,11 +21,17 @@ protected:
      void initializeGL();
      void resizeGL(int w, int h);
      void paintGL();
+     void drawHUD();
 private:
-     float x;
-     bool xdir;
      QList<QPolygonF> poly;
      int frames;
+     QList<QPointF> led1circle;
+     QList<QPointF> radar;
+     QList<QPointF> halfradar;
+     QPointF radar_tl;
+     QPointF radar_tr;
+     bool led1ON;
+     int led1count;
 protected slots:
      void animate();
      void fpscalc();
