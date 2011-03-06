@@ -3,6 +3,8 @@
 #include <math.h>
 #include <QDateTime>
 #include <QBitmap>
+#include <QApplication>
+#include <QKeyEvent>
 
 QList<QPolygonF> text2polylist(char* font, int size, QString str){
     QPainterPath path;
@@ -207,4 +209,9 @@ void ClientWidget::fpscalc()
     deleteTexture(fpstex);
     fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGBA);
     frames=0;
+}
+void ClientWidget::keyReleaseEvent(QKeyEvent *e){
+    if(e->key()==Qt::Key_Escape && e->modifiers() == Qt::ControlModifier){
+        qApp->exit();
+    }
 }

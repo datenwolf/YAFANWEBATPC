@@ -38,6 +38,7 @@ private:
 protected slots:
      void animate();
      void fpscalc();
+     void keyReleaseEvent(QKeyEvent *);
 
 };
 
