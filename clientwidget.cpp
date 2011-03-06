@@ -16,8 +16,8 @@ ClientWidget::ClientWidget(QGLWidget *parent)
 {
     qDebug()<<"widget init";
     frames=0;
+    fpscalc();
     led1ON=false;
-    poly=text2polylist("Arial",1,tr("FPS"));
     for(float t = 0; t <= 6.28f; t += 0.06f){
         radar.append(QPointF(0.4f * cos(t), 0.2f * sin(t) -0.8f));
     }
@@ -167,17 +167,18 @@ void ClientWidget::paintGL()
     glColor3f(1,1,1);
     for (int i=0;i<100;i++)
     {
-        glVertex3f(((float)(qrand()%100-50))/50.0f,((float)(qrand()%100-50))/50.0f,-1);
+        glVertex2f(((float)(qrand()%100-50))/50.0f,((float)(qrand()%100-50))/50.0f);
     }
     glEnd();
-    glLineWidth(1.5);
-    for (QList<QPolygonF>::iterator i = poly.begin(); i != poly.end(); i++){
-        glBegin(GL_LINE_LOOP);
-        glColor3f(1,1,1);
-        for (QPolygonF::iterator p = (*i).begin(); p != i->end(); p++)
-            glVertex2f(p->rx()*0.02f-1.0f, -p->ry()*0.02f+0.96f);
-        glEnd();
-    }
+    glEnable( GL_TEXTURE_2D );
+    glBindTexture( GL_TEXTURE_2D, fpstex );
+    glBegin(GL_QUADS);
+    glTexCoord2d(0.0,1.0); glVertex2d(-1.0,0.9);
+    glTexCoord2d(1.0,1.0); glVertex2d(-0.8,0.9);
+    glTexCoord2d(1.0,0.0); glVertex2d(-0.8,1.0);
+    glTexCoord2d(0.0,0.0); glVertex2d(-1.0,1.0);
+    glEnd();
+    glDisable( GL_TEXTURE_2D );
     drawHUD();
     qDebug()<<"gl paint end";
 }
@@ -192,6 +193,17 @@ void ClientWidget::fpscalc()
 {
     qDebug()<<"fpscalc()";
     qDebug()<<"FPS: "<<frames*2;
-    poly=text2polylist("Arial",1,QString::number(frames*2).append(" FPS"));
+    fpslabel.setText(QString::number(frames*2).append(" FPS"));
+    fpslabel.resize(64,32);
+    fpslabel.setStyleSheet("QLabel { color : white; }");
+    fpspix=QPixmap(fpslabel.size());
+    fpslabel.render(&fpspix,QPoint(),QRegion(),RenderFlags(!DrawWindowBackground));
+    deleteTexture(fpstex);
+    if(fpspix.hasAlphaChannel()){
+        fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGBA);
+    }else{
+        fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGB);
+    }
+    //QWidget::render ( QPaintDevice * target, const QPoint & targetOffset = QPoint(), const QRegion & sourceRegion = QRegion(), RenderFlags renderFlags = RenderFlags( DrawWindowBackground | DrawChildren ) )
     frames=0;
 }

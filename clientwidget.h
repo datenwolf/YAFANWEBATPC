@@ -7,6 +7,8 @@
 #include <QPainterPath>
 #include <QList>
 #include <QPolygonF>
+#include <QLabel>
+#include <QPixmap>
 
 class ClientWidget : public QGLWidget
 {
@@ -23,7 +25,6 @@ protected:
      void paintGL();
      void drawHUD();
 private:
-     QList<QPolygonF> poly;
      int frames;
      QList<QPointF> led1circle;
      QList<QPointF> radar;
@@ -31,6 +32,9 @@ private:
      QPointF radar_tl;
      QPointF radar_tr;
      bool led1ON;
+     QLabel fpslabel;
+     QPixmap fpspix;
+     GLuint fpstex;
 protected slots:
      void animate();
      void fpscalc();
