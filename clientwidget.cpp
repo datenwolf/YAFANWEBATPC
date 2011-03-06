@@ -60,10 +60,12 @@ void ClientWidget::initializeGL()
     QTimer *timer2 = new QTimer(this);
     connect(timer2, SIGNAL(timeout()), this, SLOT(fpscalc()));
     timer2->start(500);
+#ifdef CFG_TEXTURE_FLIP
     glMatrixMode(GL_TEXTURE);
     glLoadIdentity();
     glScalef(1.0, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
+#endif
     qDebug()<<"gl init done";
 }
 void ClientWidget::drawHUD()
@@ -181,10 +183,10 @@ void ClientWidget::paintGL()
     glEnable( GL_TEXTURE_2D );
     glBindTexture( GL_TEXTURE_2D, fpstex );
     glBegin(GL_QUADS);
-    glTexCoord2d(0.0,1.0); glVertex2d(-1.0,0.9);
-    glTexCoord2d(1.0,1.0); glVertex2d(-0.8,0.9);
-    glTexCoord2d(1.0,0.0); glVertex2d(-0.8,1.0);
-    glTexCoord2d(0.0,0.0); glVertex2d(-1.0,1.0);
+    glTexCoord2d(0.0,0.0); glVertex2d(-1.0,0.9);
+    glTexCoord2d(1.0,0.0); glVertex2d(-0.8,0.9);
+    glTexCoord2d(1.0,1.0); glVertex2d(-0.8,1.0);
+    glTexCoord2d(0.0,1.0); glVertex2d(-1.0,1.0);
     glEnd();
     glDisable( GL_TEXTURE_2D );
     drawHUD();
