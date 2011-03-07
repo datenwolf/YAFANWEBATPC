@@ -9,6 +9,7 @@
 #include <QPolygonF>
 #include <QLabel>
 #include <QPixmap>
+#include <QLCDNumber>
 
 class ClientWidget : public QGLWidget
 {
@@ -35,6 +36,9 @@ private:
      QLabel fpslabel;
      QPixmap fpspix;
      GLuint fpstex;
+     QLCDNumber clocklcd;
+     QPixmap clockpix;
+     GLuint clocktex;
 protected slots:
      void animate();
      void fpscalc();

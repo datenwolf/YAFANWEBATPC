@@ -20,6 +20,7 @@ ClientWidget::ClientWidget(QGLWidget *parent)
     qDebug()<<"widget init";
     frames=0;ftmp=0;
     fpslabel.setStyleSheet("QLabel { background: transparent; color : white; font-size: 32px; }");
+    clocklcd.setStyleSheet("QLCDNumber { background: transparent; color : white; height: 32px; }");
     led1ON=false;
     for(float t = 0; t <= 6.28f; t += 0.06f){
         radar.append(QPointF(0.4f * cos(t), 0.2f * sin(t) -0.8f));
@@ -180,6 +181,7 @@ void ClientWidget::paintGL()
         glVertex2f(((float)(qrand()%100-50))/50.0f,((float)(qrand()%100-50))/50.0f);
     }
     glEnd();
+    glColor4f(1,1,1,1);
     glEnable( GL_TEXTURE_2D );
     glBindTexture( GL_TEXTURE_2D, fpstex );
     glBegin(GL_QUADS);
@@ -189,13 +191,49 @@ void ClientWidget::paintGL()
     glTexCoord2d(0.0,1.0); glVertex2d(-1.0,1.0);
     glEnd();
     glDisable( GL_TEXTURE_2D );
+    glColor4f(1,0,1,1);
+    glBegin(GL_QUADS);
+    glVertex2d(0.8,-1.0);
+    glVertex2d(1.0,-1.0);
+    glVertex2d(1.0,-0.9);
+    glVertex2d(0.8,-0.9);
+    glEnd();
+    glColor4f(0,1,0,1);
+    glLineWidth(3);
+    glBegin(GL_LINE_STRIP);
+    glVertex2d(0.8,-1.0);
+    glVertex2d(1.0,-1.0);
+    glVertex2d(1.0,-0.9);
+    glVertex2d(0.8,-0.9);
+    glVertex2d(0.8,-0.9);
+    glVertex2d(0.8,-1.0);
+    glEnd();
+    glLineWidth(1.5);
+    glColor4f(1,1,1,1);
+    glEnable( GL_TEXTURE_2D );
+    glBindTexture( GL_TEXTURE_2D, clocktex );
+    glBegin(GL_QUADS);
+    glTexCoord2d(0.0,0.0); glVertex2d(0.8,-1.0);
+    glTexCoord2d(1.0,0.0); glVertex2d(1.0,-1.0);
+    glTexCoord2d(1.0,1.0); glVertex2d(1.0,-0.9);
+    glTexCoord2d(0.0,1.0); glVertex2d(0.8,-0.9);
+    glEnd();
+    glDisable( GL_TEXTURE_2D );
     drawHUD();
     qDebug()<<"gl paint end";
 }
 void ClientWidget::animate()
 {
     qDebug()<<"animate() start";
-    led1ON=QDateTime::currentDateTime().toTime_t()%2;
+    QDateTime now=QDateTime::currentDateTime();
+    led1ON=now.toTime_t()%2;
+    clocklcd.display(QString::number(now.time().hour()).append(":").append(QString::number(now.time().minute())));
+    clocklcd.resize(clocklcd.sizeHint());
+    clockpix=QPixmap(clocklcd.size());
+    clockpix.fill(QColor("transparent"));
+    clocklcd.render(&clockpix,QPoint(),QRegion(),RenderFlags(!DrawWindowBackground));
+    deleteTexture(clocktex);
+    clocktex=bindTexture(clockpix,GL_TEXTURE_2D,GL_RGBA);
     updateGL();
     qDebug()<<"animate() end";
 }
