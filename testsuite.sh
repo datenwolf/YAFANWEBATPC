@@ -20,5 +20,5 @@ if [ "_$1" = "_-nested" ]
     done
 else
     git pull
-    $0 -nested 2> suite.stderr | tee suite.stdout
+    $0 -nested 2>&1 | tee suite.stdouterr
 fi
