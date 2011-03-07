@@ -25,7 +25,7 @@ protected:
      void paintGL();
      void drawHUD();
 private:
-     int frames;
+     int frames; float ftmp;
      QList<QPointF> led1circle;
      QList<QPointF> radar;
      QList<QPointF> halfradar;

@@ -18,7 +18,7 @@ ClientWidget::ClientWidget(QGLWidget *parent)
     : QGLWidget(parent)
 {
     qDebug()<<"widget init";
-    frames=0;
+    frames=0;ftmp=0;
     fpslabel.setStyleSheet("QLabel { background: transparent; color : white; font-size: 32px; }");
     led1ON=false;
     for(float t = 0; t <= 6.28f; t += 0.06f){
@@ -55,7 +55,7 @@ void ClientWidget::initializeGL()
     glShadeModel(GL_SMOOTH);						// Enables Smooth Shading
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
-    timer->start(20);
+    timer->start(15);
     QTimer *timer2 = new QTimer(this);
     connect(timer2, SIGNAL(timeout()), this, SLOT(fpscalc()));
     timer2->start(500);
@@ -202,8 +202,12 @@ void ClientWidget::animate()
 void ClientWidget::fpscalc()
 {
     qDebug()<<"fpscalc()";
-    qDebug()<<"FPS: "<<frames*2;
-    fpslabel.setText(QString::number(frames*2).append(" FPS"));
+    qDebug()<<"FPS: "<<(float)ftmp+frames;
+    QString text=QString::number((float)ftmp+frames);
+    int idx=text.indexOf('.');
+    if(idx >0)
+        text=text.left(idx+2);
+    fpslabel.setText(text.append(" FPS"));
     qDebug()<<"label text updated";
     fpslabel.resize(fpslabel.sizeHint());
     qDebug()<<"label resized";
@@ -217,6 +221,8 @@ void ClientWidget::fpscalc()
     qDebug()<<"tex deleted";
     fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGBA);
     qDebug()<<"tex bound";
+    ftmp+=frames;
+    ftmp/=2.0f;
     frames=0;
     qDebug()<<"fpscalc() end";
 }
