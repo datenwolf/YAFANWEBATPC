@@ -29,3 +29,6 @@ QMAKE_CXXFLAGS += -O3
 CONFIG(textureflip) {
 DEFINES += CFG_TEXTURE_FLIP
 }
+
+OTHER_FILES += \
+    testsuite.sh
