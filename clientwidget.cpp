@@ -20,7 +20,6 @@ ClientWidget::ClientWidget(QGLWidget *parent)
     qDebug()<<"widget init";
     frames=0;
     fpslabel.setStyleSheet("QLabel { background: transparent; color : white; font-size: 32px; }");
-    fpscalc();
     led1ON=false;
     for(float t = 0; t <= 6.28f; t += 0.06f){
         radar.append(QPointF(0.4f * cos(t), 0.2f * sin(t) -0.8f));
@@ -66,6 +65,7 @@ void ClientWidget::initializeGL()
     glScalef(1.0, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
 #endif
+    fpscalc();
     qDebug()<<"gl init done";
 }
 void ClientWidget::drawHUD()
@@ -204,13 +204,21 @@ void ClientWidget::fpscalc()
     qDebug()<<"fpscalc()";
     qDebug()<<"FPS: "<<frames*2;
     fpslabel.setText(QString::number(frames*2).append(" FPS"));
+    qDebug()<<"label text updated";
     fpslabel.resize(fpslabel.sizeHint());
+    qDebug()<<"label resized";
     fpspix=QPixmap(fpslabel.size());
+    qDebug()<<"pix resized";
     fpspix.fill(QColor("transparent"));
+    qDebug()<<"pix filled";
     fpslabel.render(&fpspix,QPoint(),QRegion(),RenderFlags(!DrawWindowBackground));
+    qDebug()<<"label rendered to pix";
     deleteTexture(fpstex);
+    qDebug()<<"tex deleted";
     fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGBA);
+    qDebug()<<"tex bound";
     frames=0;
+    qDebug()<<"fpscalc() end";
 }
 void ClientWidget::keyReleaseEvent(QKeyEvent *e){
     if(e->key()==Qt::Key_Escape && e->modifiers() == Qt::ControlModifier){
