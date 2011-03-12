@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QLCDNumber>
+#include "spaceobject.h"
 
 class ClientWidget : public QGLWidget
 {
@@ -26,6 +27,7 @@ protected:
      void paintGL();
      void drawHUD();
 private:
+     SpaceObject me;
      int frames; float ftmp;
      QList<QPointF> led1circle;
      QList<QPointF> radar;

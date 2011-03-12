@@ -11,6 +11,7 @@ public:
     qint32 objtype;
     qint32 flags;
     QVector3D position;
+    QVector3D velocity;
     QVector3D rotation; //right hand rule rotation around axes.
 
 signals:

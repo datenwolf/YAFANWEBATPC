@@ -19,8 +19,8 @@ ClientWidget::ClientWidget(QGLWidget *parent)
 {
     qDebug()<<"widget init";
     frames=0;ftmp=0;
-    fpslabel.setStyleSheet("QLabel { background: transparent; color : white; font-size: 32px; }");
-    clocklcd.setStyleSheet("QLCDNumber { background: transparent; color : white; height: 32px; }");
+    fpslabel.setStyleSheet(tr("QLabel { background: transparent; color : white; font-size: 32px; }"));
+    clocklcd.setStyleSheet(tr("QLCDNumber { background: transparent; color : white; height: 32px; }"));
     led1ON=false;
     for(float t = 0; t <= 6.28f; t += 0.06f){
         radar.append(QPointF(0.4f * cos(t), 0.2f * sin(t) -0.8f));
@@ -245,7 +245,7 @@ void ClientWidget::fpscalc()
     int idx=text.indexOf('.');
     if(idx >0)
         text=text.left(idx+2);
-    fpslabel.setText(text.append(" FPS"));
+    fpslabel.setText(text.append(tr(" FPS","fps in top left label")));
     qDebug()<<"label text updated";
     fpslabel.resize(fpslabel.sizeHint());
     qDebug()<<"label resized";

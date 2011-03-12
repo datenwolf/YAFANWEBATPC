@@ -12,10 +12,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         clientwidget.cpp \
-    spaceobject.cpp
+    spaceobject.cpp \
+    server.cpp
 
 HEADERS  += clientwidget.h \
-    spaceobject.h
+    spaceobject.h \
+    server.h
 
 CONFIG(debug, debug|release) {
 # here comes debug specific statements
@@ -31,4 +33,9 @@ DEFINES += CFG_TEXTURE_FLIP
 }
 
 OTHER_FILES += \
-    testsuite.sh
+    testsuite.sh \
+    translate.sh \
+    de_DE.ts
+TRANSLATIONS += \
+    de_DE.ts
+CODECFORTR = UTF-8

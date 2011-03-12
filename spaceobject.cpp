@@ -9,6 +9,7 @@ QDataStream &operator<<(QDataStream& s, const SpaceObject& o){
     s << o.objtype;
     s << o.flags;
     s << o.position;
+    s << o.velocity;
     s << o.rotation; //right hand rule rotation around axes.
     return s;
 }
@@ -20,6 +21,7 @@ QDataStream &operator>>(QDataStream& s, SpaceObject& o){
         s >> o.objtype;
         s >> o.flags;
         s >> o.position;
+        s >> o.velocity;
         s >> o.rotation;
     }
     return s;
