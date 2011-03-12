@@ -6,7 +6,7 @@
     <message>
         <location filename="clientwidget.cpp" line="20"/>
         <source>widget init</source>
-        <translation type="unfinished"></translation>
+        <translation>widget init</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="22"/>
@@ -23,77 +23,77 @@
     <message>
         <location filename="clientwidget.cpp" line="38"/>
         <source>widget destruct</source>
-        <translation type="unfinished"></translation>
+        <translation>widget destruct</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="43"/>
         <source>gl init</source>
-        <translation type="unfinished"></translation>
+        <translation>gl init</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="64"/>
         <source>flipping gl textures</source>
-        <translation type="unfinished"></translation>
+        <translation>flipping gl textures</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="71"/>
         <source>gl init done</source>
-        <translation type="unfinished"></translation>
+        <translation>gl init done</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="158"/>
         <source>gl resize</source>
-        <translation type="unfinished"></translation>
+        <translation>gl resize</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="168"/>
         <source>gl resize done</source>
-        <translation type="unfinished"></translation>
+        <translation>gl resize done</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="174"/>
         <source>gl paint start</source>
-        <translation type="unfinished"></translation>
+        <translation>gl paint start</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="224"/>
         <source>gl paint end</source>
-        <translation type="unfinished"></translation>
+        <translation>gl paint end</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="228"/>
         <source>animate() start</source>
-        <translation type="unfinished"></translation>
+        <translation>animate() start</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="239"/>
         <source>animate() end</source>
-        <translation type="unfinished"></translation>
+        <translation>animate() end</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="243"/>
         <source>fpscalc()</source>
-        <translation type="unfinished"></translation>
+        <translation>fpscalc()</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="244"/>
         <source>FPS: </source>
-        <translation type="unfinished"></translation>
+        <translation>FPS: </translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="249"/>
         <source> FPS</source>
-        <translation type="unfinished"> FPS</translation>
+        <translation> FPS</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="258"/>
         <source>fpscalc() end</source>
-        <translation type="unfinished"></translation>
+        <translation>fpscalc() end</translation>
     </message>
     <message>
         <location filename="clientwidget.cpp" line="261"/>
         <source>keyReleaseEvent() with key: </source>
-        <translation type="unfinished"></translation>
+        <translation>keyReleaseEvent() with key: </translation>
     </message>
     <message>
         <source> FPS</source>
