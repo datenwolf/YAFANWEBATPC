@@ -11,6 +11,7 @@
 #include <QPixmap>
 #include <QLCDNumber>
 #include "spaceobject.h"
+#include "global_defines.h"
 
 class ClientWidget : public QGLWidget
 {

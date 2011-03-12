@@ -17,7 +17,7 @@ QList<QPolygonF> text2polylist(char* font, int size, QString str){
 ClientWidget::ClientWidget(QGLWidget *parent)
     : QGLWidget(parent)
 {
-    qDebug()<<tr("widget init");
+    qDebug()<<ENCAPS("widget init");
     frames=0;ftmp=0;
     fpslabel.setStyleSheet(tr("QLabel { background: transparent; color : white; font-size: 32px; }"));
     clocklcd.setStyleSheet(tr("QLCDNumber { background: transparent; color : white; height: 32px; }"));
@@ -35,12 +35,12 @@ ClientWidget::ClientWidget(QGLWidget *parent)
 
 ClientWidget::~ClientWidget()
 {
-    qDebug()<<tr("widget destruct");
+    qDebug()<<ENCAPS("widget destruct");
 }
 
 void ClientWidget::initializeGL()
 {
-    qDebug()<<tr("gl init");
+    qDebug()<<ENCAPS("gl init");
     glClearColor(0, 0, 0, 0.0);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);         // The Type Of Depth Test To Do
@@ -61,14 +61,14 @@ void ClientWidget::initializeGL()
     connect(timer2, SIGNAL(timeout()), this, SLOT(fpscalc()));
     timer2->start(500);
 #ifdef CFG_TEXTURE_FLIP
-    qDebug()<<tr("flipping gl textures");
+    qDebug()<<ENCAPS("flipping gl textures");
     glMatrixMode(GL_TEXTURE);
     glLoadIdentity();
     glScalef(1.0, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
 #endif
     fpscalc();
-    qDebug()<<tr("gl init done");
+    qDebug()<<ENCAPS("gl init done");
 }
 void ClientWidget::drawHUD()
 {
@@ -155,7 +155,7 @@ void ClientWidget::drawHUD()
 
 void ClientWidget::resizeGL(int w, int h)
 {
-    qDebug()<<tr("gl resize");
+    qDebug()<<ENCAPS("gl resize");
     glMatrixMode(GL_PROJECTION);
     glViewport(0, 0, (GLint)w, (GLint)h);
     gluPerspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100000.0f);
@@ -165,13 +165,13 @@ void ClientWidget::resizeGL(int w, int h)
               0.0, 0.0, -1.0,
               0.0, 1.0, 0.0);
     glMatrixMode(GL_PROJECTION);
-    qDebug()<<tr("gl resize done");
+    qDebug()<<ENCAPS("gl resize done");
 }
 
 void ClientWidget::paintGL()
 {
     frames+=1;
-    qDebug()<<tr("gl paint start");
+    qDebug()<<ENCAPS("gl paint start");
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
     glLoadIdentity();					// Reset The Current Modelview Matrix
     qsrand(0);
@@ -221,11 +221,11 @@ void ClientWidget::paintGL()
     glEnd();
     glDisable( GL_TEXTURE_2D );
     drawHUD();
-    qDebug()<<tr("gl paint end");
+    qDebug()<<ENCAPS("gl paint end");
 }
 void ClientWidget::animate()
 {
-    qDebug()<<tr("animate() start");
+    qDebug()<<ENCAPS("animate() start");
     QDateTime now=QDateTime::currentDateTime();
     led1ON=now.toTime_t()%2;
     clocklcd.display(QString::number(now.time().hour()).append(":").append(QString::number(now.time().minute())));
@@ -236,12 +236,12 @@ void ClientWidget::animate()
     deleteTexture(clocktex);
     clocktex=bindTexture(clockpix,GL_TEXTURE_2D,GL_RGBA);
     updateGL();
-    qDebug()<<tr("animate() end");
+    qDebug()<<ENCAPS("animate() end");
 }
 void ClientWidget::fpscalc()
 {
-    qDebug()<<tr("fpscalc()");
-    qDebug()<<tr("FPS: ")<<(float)ftmp+frames;
+    qDebug()<<ENCAPS("fpscalc()");
+    qDebug()<<ENCAPS("FPS: ")<<(float)ftmp+frames;
     QString text=QString::number((float)ftmp+frames);
     int idx=text.indexOf('.');
     if(idx >0)
@@ -255,10 +255,10 @@ void ClientWidget::fpscalc()
     ftmp+=frames;
     ftmp/=2.0f;
     frames=0;
-    qDebug()<<tr("fpscalc() end");
+    qDebug()<<ENCAPS("fpscalc() end");
 }
 void ClientWidget::keyReleaseEvent(QKeyEvent *e){
-    qDebug()<<tr("keyReleaseEvent() with key: ").append(e->text());
+    qDebug()<<ENCAPS("keyReleaseEvent() with key: ")<<e->key();
     if(e->key()==Qt::Key_Escape && e->modifiers() == Qt::ControlModifier){
         qApp->exit();
     }

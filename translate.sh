@@ -1,3 +1,3 @@
 #!/bin/bash
-lupdate-qt4 yafanwebatpc.pro -ts @languages.list
-lrelease yafanwebatpc.pro
+lupdate-qt4 $1yafanwebatpc.pro -ts @languages.list
+lrelease $1yafanwebatpc.pro
