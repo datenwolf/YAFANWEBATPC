@@ -35,7 +35,8 @@ DEFINES += CFG_TEXTURE_FLIP
 OTHER_FILES += \
     testsuite.sh \
     translate.sh \
-    de_DE.ts
+    de_DE.ts \
+    languages.list
 TRANSLATIONS += \
     de_DE.ts
 CODECFORTR = UTF-8
