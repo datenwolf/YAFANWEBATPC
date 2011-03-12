@@ -17,7 +17,7 @@ QList<QPolygonF> text2polylist(char* font, int size, QString str){
 ClientWidget::ClientWidget(QGLWidget *parent)
     : QGLWidget(parent)
 {
-    qDebug()<<"widget init";
+    qDebug()<<tr("widget init");
     frames=0;ftmp=0;
     fpslabel.setStyleSheet(tr("QLabel { background: transparent; color : white; font-size: 32px; }"));
     clocklcd.setStyleSheet(tr("QLCDNumber { background: transparent; color : white; height: 32px; }"));
@@ -35,12 +35,12 @@ ClientWidget::ClientWidget(QGLWidget *parent)
 
 ClientWidget::~ClientWidget()
 {
-    qDebug()<<"widget destruct";
+    qDebug()<<tr("widget destruct");
 }
 
 void ClientWidget::initializeGL()
 {
-    qDebug()<<"gl init";
+    qDebug()<<tr("gl init");
     glClearColor(0, 0, 0, 0.0);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);         // The Type Of Depth Test To Do
@@ -61,13 +61,14 @@ void ClientWidget::initializeGL()
     connect(timer2, SIGNAL(timeout()), this, SLOT(fpscalc()));
     timer2->start(500);
 #ifdef CFG_TEXTURE_FLIP
+    qDebug()<<tr("flipping gl textures");
     glMatrixMode(GL_TEXTURE);
     glLoadIdentity();
     glScalef(1.0, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
 #endif
     fpscalc();
-    qDebug()<<"gl init done";
+    qDebug()<<tr("gl init done");
 }
 void ClientWidget::drawHUD()
 {
@@ -154,7 +155,7 @@ void ClientWidget::drawHUD()
 
 void ClientWidget::resizeGL(int w, int h)
 {
-    qDebug()<<"gl resize";
+    qDebug()<<tr("gl resize");
     glMatrixMode(GL_PROJECTION);
     glViewport(0, 0, (GLint)w, (GLint)h);
     gluPerspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100000.0f);
@@ -164,13 +165,13 @@ void ClientWidget::resizeGL(int w, int h)
               0.0, 0.0, -1.0,
               0.0, 1.0, 0.0);
     glMatrixMode(GL_PROJECTION);
-    qDebug()<<"gl resize done";
+    qDebug()<<tr("gl resize done");
 }
 
 void ClientWidget::paintGL()
 {
     frames+=1;
-    qDebug()<<"gl paint start";
+    qDebug()<<tr("gl paint start");
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
     glLoadIdentity();					// Reset The Current Modelview Matrix
     qsrand(0);
@@ -220,11 +221,11 @@ void ClientWidget::paintGL()
     glEnd();
     glDisable( GL_TEXTURE_2D );
     drawHUD();
-    qDebug()<<"gl paint end";
+    qDebug()<<tr("gl paint end");
 }
 void ClientWidget::animate()
 {
-    qDebug()<<"animate() start";
+    qDebug()<<tr("animate() start");
     QDateTime now=QDateTime::currentDateTime();
     led1ON=now.toTime_t()%2;
     clocklcd.display(QString::number(now.time().hour()).append(":").append(QString::number(now.time().minute())));
@@ -235,36 +236,29 @@ void ClientWidget::animate()
     deleteTexture(clocktex);
     clocktex=bindTexture(clockpix,GL_TEXTURE_2D,GL_RGBA);
     updateGL();
-    qDebug()<<"animate() end";
+    qDebug()<<tr("animate() end");
 }
 void ClientWidget::fpscalc()
 {
-    qDebug()<<"fpscalc()";
-    qDebug()<<"FPS: "<<(float)ftmp+frames;
+    qDebug()<<tr("fpscalc()");
+    qDebug()<<tr("FPS: ")<<(float)ftmp+frames;
     QString text=QString::number((float)ftmp+frames);
     int idx=text.indexOf('.');
     if(idx >0)
         text=text.left(idx+2);
-    fpslabel.setText(text.append(tr(" FPS","fps in top left label")));
-    qDebug()<<"label text updated";
+    fpslabel.setText(text.append(tr(" FPS")));
     fpslabel.resize(fpslabel.sizeHint());
-    qDebug()<<"label resized";
     fpspix=QPixmap(fpslabel.size());
-    qDebug()<<"pix resized";
-    fpspix.fill(QColor("transparent"));
-    qDebug()<<"pix filled";
     fpslabel.render(&fpspix,QPoint(),QRegion(),RenderFlags(!DrawWindowBackground));
-    qDebug()<<"label rendered to pix";
     deleteTexture(fpstex);
-    qDebug()<<"tex deleted";
     fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGBA);
-    qDebug()<<"tex bound";
     ftmp+=frames;
     ftmp/=2.0f;
     frames=0;
-    qDebug()<<"fpscalc() end";
+    qDebug()<<tr("fpscalc() end");
 }
 void ClientWidget::keyReleaseEvent(QKeyEvent *e){
+    qDebug()<<tr("keyReleaseEvent() with key: ").append(e->text());
     if(e->key()==Qt::Key_Escape && e->modifiers() == Qt::ControlModifier){
         qApp->exit();
     }
