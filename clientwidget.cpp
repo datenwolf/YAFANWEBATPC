@@ -31,6 +31,8 @@ ClientWidget::ClientWidget(QGLWidget *parent)
     }
     radar_tl=QPointF(0.4f * cos(0.785398163), 0.2f * sin(0.785398163) -0.8f);
     radar_tr=QPointF(0.4f * cos(2.35619449), 0.2f * sin(2.35619449) -0.8f);
+    hud.load("hud.png");
+    emptybm.clear();
 }
 
 ClientWidget::~ClientWidget()
@@ -68,10 +70,12 @@ void ClientWidget::initializeGL()
     glMatrixMode(GL_MODELVIEW);
 #endif
     fpscalc();
+    hudtex=bindTexture(hud,GL_TEXTURE_2D,GL_RGBA);
     qDebug()<<ENCAPS(tr("gl init done"));
 }
 void ClientWidget::drawHUD()
 {
+/*
     glPointSize(2);
     glBegin(GL_POINTS);
     glColor4f(1,0,0,0.75f);
@@ -151,6 +155,16 @@ void ClientWidget::drawHUD()
     glEnd();
     glPointSize(1);
     glLineWidth(1.5);
+    */
+    glEnable( GL_TEXTURE_2D );
+    glBindTexture( GL_TEXTURE_2D, hudtex );
+    glBegin(GL_QUADS);
+    glTexCoord2d(0.0,0.0); glVertex2d(-1.0,-1.0);
+    glTexCoord2d(1.0,0.0); glVertex2d( 1.0,-1.0);
+    glTexCoord2d(1.0,1.0); glVertex2d( 1.0, 1.0);
+    glTexCoord2d(0.0,1.0); glVertex2d(-1.0, 1.0);
+    glEnd();
+    glDisable( GL_TEXTURE_2D );
 }
 
 void ClientWidget::resizeGL(int w, int h)
@@ -183,44 +197,25 @@ void ClientWidget::paintGL()
     }
     glEnd();
     glColor4f(1,1,1,1);
+    drawHUD();
     glEnable( GL_TEXTURE_2D );
     glBindTexture( GL_TEXTURE_2D, fpstex );
     glBegin(GL_QUADS);
-    glTexCoord2d(0.0,0.0); glVertex2d(-1.0,0.9);
-    glTexCoord2d(1.0,0.0); glVertex2d(-0.8,0.9);
-    glTexCoord2d(1.0,1.0); glVertex2d(-0.8,1.0);
-    glTexCoord2d(0.0,1.0); glVertex2d(-1.0,1.0);
+    glTexCoord2d(0.0,1.0); glVertex2d(-1.0,0.9);
+    glTexCoord2d(1.0,1.0); glVertex2d(-0.8,0.9);
+    glTexCoord2d(1.0,0.0); glVertex2d(-0.8,1.0);
+    glTexCoord2d(0.0,0.0); glVertex2d(-1.0,1.0);
     glEnd();
     glDisable( GL_TEXTURE_2D );
-    glColor4f(1,0,1,1);
-    glBegin(GL_QUADS);
-    glVertex2d(0.8,-1.0);
-    glVertex2d(1.0,-1.0);
-    glVertex2d(1.0,-0.9);
-    glVertex2d(0.8,-0.9);
-    glEnd();
-    glColor4f(0,1,0,1);
-    glLineWidth(3);
-    glBegin(GL_LINE_STRIP);
-    glVertex2d(0.8,-1.0);
-    glVertex2d(1.0,-1.0);
-    glVertex2d(1.0,-0.9);
-    glVertex2d(0.8,-0.9);
-    glVertex2d(0.8,-0.9);
-    glVertex2d(0.8,-1.0);
-    glEnd();
-    glLineWidth(1.5);
-    glColor4f(1,1,1,1);
     glEnable( GL_TEXTURE_2D );
     glBindTexture( GL_TEXTURE_2D, clocktex );
     glBegin(GL_QUADS);
-    glTexCoord2d(0.0,0.0); glVertex2d(0.8,-1.0);
-    glTexCoord2d(1.0,0.0); glVertex2d(1.0,-1.0);
-    glTexCoord2d(1.0,1.0); glVertex2d(1.0,-0.9);
-    glTexCoord2d(0.0,1.0); glVertex2d(0.8,-0.9);
+    glTexCoord2d(0.0,1.0); glVertex2d(0.8,-1.0);
+    glTexCoord2d(1.0,1.0); glVertex2d(1.0,-1.0);
+    glTexCoord2d(1.0,0.0); glVertex2d(1.0,-0.9);
+    glTexCoord2d(0.0,0.0); glVertex2d(0.8,-0.9);
     glEnd();
     glDisable( GL_TEXTURE_2D );
-    drawHUD();
     qDebug()<<ENCAPS(tr("gl paint end"));
 }
 void ClientWidget::animate()
@@ -249,6 +244,7 @@ void ClientWidget::fpscalc()
     fpslabel.setText(text.append(tr(" FPS")));
     fpslabel.resize(fpslabel.sizeHint());
     fpspix=QPixmap(fpslabel.size());
+    fpspix.fill(QColor("transparent"));
     fpslabel.render(&fpspix,QPoint(),QRegion(),RenderFlags(!DrawWindowBackground));
     deleteTexture(fpstex);
     fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGBA);

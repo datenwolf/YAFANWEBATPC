@@ -11,6 +11,7 @@
 #include <QPixmap>
 #include <QLCDNumber>
 #include <QDataStream>
+#include <QBitmap>
 #include "spaceobject.h"
 #include "global_defines.h"
 
@@ -43,6 +44,9 @@ private:
      QLCDNumber clocklcd;
      QPixmap clockpix;
      GLuint clocktex;
+     QImage hud;
+     GLuint hudtex;
+     QBitmap emptybm;
 protected slots:
      void animate();
      void fpscalc();

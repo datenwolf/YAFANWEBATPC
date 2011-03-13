@@ -48,6 +48,7 @@ OTHER_FILES += \
     testsuite.sh \
     translate.sh \
     languages.list \
+    hud.png \
     $${TRANSLATIONS}
 CODECFORTR = UTF-8
 
