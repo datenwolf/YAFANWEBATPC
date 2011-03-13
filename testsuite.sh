@@ -2,11 +2,11 @@
 
 qm_dbgtexflip="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=textureflip"
 qm_dbgnotexflip="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=debug"
-qm_reltexflip="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=release CONFIG+=textureflip"
-qm_relnotexflip="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=release"
+qm_dbgtfqf="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=textureflip CONFIG+=qtToTextureFlip"
+qm_dbgtfnqf="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=qtToTextureFlip"
 
 if [ "_$1" = "_-nested" ]
-    then for cfg in dbgtexflip dbgnotexflip reltexflip relnotexflip
+    then for cfg in dbgtexflip dbgnotexflip dbgtfqf dbgntfqf
         do [ -f Makefile ] && make distclean
         eval "tmp=\$qm_${cfg}"
         $tmp

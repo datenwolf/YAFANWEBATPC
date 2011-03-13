@@ -14,6 +14,12 @@
 #include <QBitmap>
 #include "spaceobject.h"
 #include "global_defines.h"
+#ifdef QT_TO_TEXTURE_FLIP
+#define QT_TO_TEXTURE_ROTATION 0
+#else
+#define QT_TO_TEXTURE_ROTATION 1
+#endif
+
 
 class ClientWidget : public QGLWidget
 {

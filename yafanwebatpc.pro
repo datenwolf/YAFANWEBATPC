@@ -42,6 +42,10 @@ CONFIG(textureflip) {
     DEFINES += CFG_TEXTURE_FLIP
 }
 
+CONFIG(qtToTextureFlip){
+    DEFINES += QT_TO_TEXTURE_FLIP
+}
+
 TRANSLATIONS += $$system(cat languages.list)
 
 OTHER_FILES += \
