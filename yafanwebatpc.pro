@@ -13,12 +13,21 @@ TEMPLATE = app
 SOURCES += main.cpp\
         clientwidget.cpp \
     spaceobject.cpp \
-    server.cpp
+    server.cpp \
+    connection.cpp \
+    loopbackconnection.cpp \
+    objparser.cpp \
+    objverttag.cpp
 
 HEADERS  += clientwidget.h \
     spaceobject.h \
     server.h \
-    global_defines.h
+    global_defines.h \
+    connection.h \
+    loopbackconnection.h \
+    objparser.h \
+    objtag.h \
+    objverttag.h
 
 CONFIG(debug, debug|release) {
 # here comes debug specific statements

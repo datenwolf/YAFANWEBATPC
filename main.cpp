@@ -3,7 +3,9 @@
 #include <QDebug>
 #include <QTextCodec>
 #include <QTranslator>
-
+#if 0
+#include "loopbackconnection.h"
+#endif
 int main(int argc, char *argv[])
 {
     qDebug()<<"main init";

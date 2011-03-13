@@ -9,9 +9,14 @@ class Server : public QObject
 public:
     explicit Server(QObject *parent = 0);
 
-signals:
-
 public slots:
+    void messageFromClient(QString message,QString client);
+    void clientLogIn(QString client);
+    void clientDisconnection(QString client);
+signals:
+    void sendToClient(QString message,QString client);
+    void disconnectClient(QString client);
+
 
 };
 
