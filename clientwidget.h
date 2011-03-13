@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QLCDNumber>
+#include <QDataStream>
 #include "spaceobject.h"
 #include "global_defines.h"
 
@@ -46,11 +47,11 @@ protected slots:
      void animate();
      void fpscalc();
      void keyReleaseEvent(QKeyEvent *);
-     void messageFromServer(QString message){}
+     void messageFromServer(QDataStream& message){}
      void serverDisconnected(){}
 signals:
      void logInToServer(QString server);
-     void sendToServer(QString message);
+     void sendToServer(QDataStream& message);
      void disconnectFromServer();
 
 };

@@ -2,6 +2,7 @@
 #define CONNECTION_H
 
 #include <QObject>
+#include <QDataStream>
 
 #define CONNECTION_MODE_SERVER 0
 #define CONNECTION_MODE_CLIENT 1
@@ -15,17 +16,17 @@ public:
     int mode;
 
 signals:
-    void messageFromServer(QString message);//client
+    void messageFromServer(QDataStream& message);//client
     void serverDisconnected();
-    void messageFromClient(QString message,QString client);//server
+    void messageFromClient(QDataStream& message,QString client);//server
     void clientLogIn(QString client);
     void clientDisconnection(QString client);
 public slots:
-    void logInToServer(QString server);//client
-    void sendToServer(QString message);
-    void disconnectFromServer();
-    void sendToClient(QString message,QString client);//server
-    void disconnectClient(QString client);
+    virtual void logInToServer(QString server){}//client
+    virtual void sendToServer(QDataStream& message){}
+    virtual void disconnectFromServer(){}
+    virtual void sendToClient(QDataStream& message,QString client){}//server
+    virtual void disconnectClient(QString client){}
 
 };
 

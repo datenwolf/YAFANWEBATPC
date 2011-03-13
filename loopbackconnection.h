@@ -9,16 +9,16 @@ public:
     int mode;
 
 signals:
-    void messageFromServer(QString message);//client
+    void messageFromServer(QDataStream& message);//client
     void serverDisconnected();
-    void messageFromClient(QString message,QString client);//server
+    void messageFromClient(QDataStream& message,QString client);//server
     void clientLogIn(QString client);
     void clientDisconnection(QString client);
 public slots:
     void logInToServer(QString server);//client
-    void sendToServer(QString message);
+    void sendToServer(QDataStream& message);
     void disconnectFromServer();
-    void sendToClient(QString message,QString client);//server
+    void sendToClient(QDataStream& message,QString client);//server
     void disconnectClient(QString client);
 
 };
