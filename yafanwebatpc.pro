@@ -33,8 +33,7 @@ CONFIG(textureflip) {
     DEFINES += CFG_TEXTURE_FLIP
 }
 
-TRANSLATIONS += \
-    de_DE.ts
+TRANSLATIONS += $$system(cat languages.list)
 
 OTHER_FILES += \
     testsuite.sh \

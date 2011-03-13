@@ -1,7 +1,7 @@
 #ifndef GLOBAL_DEFINES_H
 #define GLOBAL_DEFINES_H
 
-#define ENCAPS(txt) (char*)tr(txt).toUtf8().data()
+#define ENCAPS(txt) (char*)txt.toUtf8().data()
 
 
 
