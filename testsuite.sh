@@ -7,7 +7,7 @@ qm_relnotexflip="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=release"
 
 if [ "_$1" = "_-nested" ]
     then for cfg in dbgtexflip dbgnotexflip reltexflip relnotexflip
-        do make distclean
+        do [ -f Makefile ] && make distclean
         eval "tmp=\$qm_${cfg}"
         $tmp
         make > $cfg.make.stdout 2> $cfg.make.stderr
