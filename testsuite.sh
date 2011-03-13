@@ -3,7 +3,7 @@
 qm_dbgtexflip="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=textureflip"
 qm_dbgnotexflip="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=debug"
 qm_dbgtfqf="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=textureflip CONFIG+=qtToTextureFlip"
-qm_dbgtfnqf="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=qtToTextureFlip"
+qm_dbgntfqf="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=qtToTextureFlip"
 
 if [ "_$1" = "_-nested" ]
     then for cfg in dbgtexflip dbgnotexflip dbgtfqf dbgntfqf
