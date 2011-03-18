@@ -11,10 +11,10 @@ qm_list="CONFIG+=debug CONFIG+=qtToTextureFlip CONFIG+=textureflip"
 
 
 if [ "_$1" = "_-nested" ]
-    then for cfg1 in "" $qm_list ; do for cfg2 in "" $qm_list ; do for cfg3 in "" $qm_list ; do
+    then for cfg1 in "" $qm_list ; do for cfg2 in "" ${qm_list//"$cfg1"/} ; do for cfg3 in "" ${{qm_list//"$cfg1"/}//"$cfg2"/} ; do
         [ -f Makefile ] && make distclean
-        tmp=$qm_main $cfg1 $cfg2 $cfg3
-        cfg=$(echo $tmp | base64 -w 0 | tr "=" "_")
+        tmp="$qm_main $cfg1 $cfg2 $cfg3"
+        cfg=$(echo "$tmp" | base64 -w 0 | tr "=" "_")
         $tmp
         make > $cfg.make.stdout 2> $cfg.make.stderr
         ./yafanwebatpc > $cfg.stdout 2> $cfg.stderr &
