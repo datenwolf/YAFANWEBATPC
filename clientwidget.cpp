@@ -19,6 +19,7 @@ ClientWidget::ClientWidget(QGLWidget *parent)
 {
     qDebug()<<ENCAPS(tr("widget init"));
     frames=0;ftmp=0;
+    clocktex=0;
     fpslabel.setStyleSheet(tr("QLabel { background: transparent; color : white; font-size: 32px; }"));
     clocklcd.setStyleSheet(tr("QLCDNumber { background: transparent; color : white; height: 32px; }"));
     led1ON=false;
@@ -38,6 +39,9 @@ ClientWidget::ClientWidget(QGLWidget *parent)
 ClientWidget::~ClientWidget()
 {
     qDebug()<<ENCAPS(tr("widget destruct"));
+    if(clocktex) deleteTexture(clocktex);
+    if(fpstex) deleteTexture(fpstex);
+
 }
 
 void ClientWidget::initializeGL()
@@ -75,96 +79,17 @@ void ClientWidget::initializeGL()
 }
 void ClientWidget::drawHUD()
 {
-/*
-    glPointSize(2);
-    glBegin(GL_POINTS);
-    glColor4f(1,0,0,0.75f);
-    glVertex2d(0,0);
-    glEnd();
-    glLineWidth(2);
-    glBegin(GL_LINE); //crosshair
-    glColor4f(1,0,0,0.5f);
-    glVertex2d(  0.1f,    0.1f);
-    glVertex2d( -0.1f,   -0.1f);
-
-    glVertex2d(  0.1f,   -0.1f);
-    glVertex2d( -0.1f,    0.1f);
-    glEnd();
-    glLineWidth(4);
-    glBegin(GL_LINE);
-    glColor4f(1,0,0,1);
-    glVertex2d( -0.1f,    0.0f);
-    glVertex2d( -0.2f,    0.0f);
-
-    glVertex2d(  0.1f,    0.0f);
-    glVertex2d(  0.2f,    0.0f);
-
-    glVertex2d(  0.0f,   -0.1f);
-    glVertex2d(  0.0f,   -0.2f);
-
-    glVertex2d(  0.0f,    0.1f);
-    glVertex2d(  0.0f,    0.2f);
-    glEnd();
-    glLineWidth(1.5);
-    glBegin(GL_LINE);
-    glColor4f(0,1,0,1);//instruments
-    glVertex2d(  -1,     -0.6f);
-    glVertex2d(   1,     -0.6f);
-    glEnd();
-    glBegin(GL_QUADS);
-    glColor4f(0,1,0,0.5);
-    glVertex2f(-1,-0.6f);
-    glVertex2f( 1,-0.6f);
-    glVertex2f( 1,-1);
-    glVertex2f(-1,-1);
-    glEnd();
-    glBegin(GL_POLYGON);
-    glColor4f(0,1,0,0.25);
-    for (QList<QPointF>::iterator i = radar.begin(); i != radar.end(); i++)
-        glVertex2f(i->x(),i->y());
-    glEnd();
-    glBegin(GL_POLYGON);
-    for (QList<QPointF>::iterator i = halfradar.begin(); i != halfradar.end(); i++)
-        glVertex2f(i->x(),i->y());
-    glEnd();
-    glBegin(GL_LINE_LOOP);
-    glColor4f(0,1,0,1);
-    for (QList<QPointF>::iterator i = radar.begin(); i != radar.end(); i++)
-        glVertex2f(i->x(),i->y());
-    glEnd();
-    glBegin(GL_POLYGON);//LED1
-    if(led1ON){
-        glColor4f(1,0,0,1);
-    }else{
-        glColor4f(0.3,0.1,0.1,1);
+    if(hudtex){
+        glEnable( GL_TEXTURE_2D );
+        glBindTexture( GL_TEXTURE_2D, hudtex );
+        glBegin(GL_QUADS);
+        glTexCoord2d(0.0,0.0); glVertex2d(-1.0,-1.0);
+        glTexCoord2d(1.0,0.0); glVertex2d( 1.0,-1.0);
+        glTexCoord2d(1.0,1.0); glVertex2d( 1.0, 1.0);
+        glTexCoord2d(0.0,1.0); glVertex2d(-1.0, 1.0);
+        glEnd();
+        glDisable( GL_TEXTURE_2D );
     }
-    for (QList<QPointF>::iterator i = led1circle.begin(); i != led1circle.end(); i++)
-        glVertex2f(i->x(),i->y());
-    glEnd();
-    glColor4f(0,1,0,1);
-    glBegin(GL_LINE_STRIP);
-    glVertex2f(radar_tl.x(),radar_tl.y());
-    glVertex2f(0,-0.8f);
-    glVertex2f(radar_tr.x(),radar_tr.y());
-    glEnd();
-    glBegin(GL_LINE);
-    glVertex2f(0,-0.8f);
-    glVertex2f(0,-1);
-    glVertex2f(0,-0.7f);
-    glVertex2f(0,-0.6);
-    glEnd();
-    glPointSize(1);
-    glLineWidth(1.5);
-    */
-    glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, hudtex );
-    glBegin(GL_QUADS);
-    glTexCoord2d(0.0,0.0); glVertex2d(-1.0,-1.0);
-    glTexCoord2d(1.0,0.0); glVertex2d( 1.0,-1.0);
-    glTexCoord2d(1.0,1.0); glVertex2d( 1.0, 1.0);
-    glTexCoord2d(0.0,1.0); glVertex2d(-1.0, 1.0);
-    glEnd();
-    glDisable( GL_TEXTURE_2D );
 }
 
 void ClientWidget::resizeGL(int w, int h)
@@ -198,24 +123,28 @@ void ClientWidget::paintGL()
     glEnd();
     glColor4f(1,1,1,1);
     drawHUD();
-    glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, fpstex );
-    glBegin(GL_QUADS);
-    glTexCoord2d(0.0,QT_TO_TEXTURE_ROTATION); glVertex2d(-1.0,0.9);
-    glTexCoord2d(1.0,QT_TO_TEXTURE_ROTATION); glVertex2d(-0.8,0.9);
-    glTexCoord2d(1.0,!QT_TO_TEXTURE_ROTATION); glVertex2d(-0.8,1.0);
-    glTexCoord2d(0.0,!QT_TO_TEXTURE_ROTATION); glVertex2d(-1.0,1.0);
-    glEnd();
-    glDisable( GL_TEXTURE_2D );
-    glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, clocktex );
-    glBegin(GL_QUADS);
-    glTexCoord2d(0.0,QT_TO_TEXTURE_ROTATION); glVertex2d(0.8,-1.0);
-    glTexCoord2d(1.0,QT_TO_TEXTURE_ROTATION); glVertex2d(1.0,-1.0);
-    glTexCoord2d(1.0,!QT_TO_TEXTURE_ROTATION); glVertex2d(1.0,-0.9);
-    glTexCoord2d(0.0,!QT_TO_TEXTURE_ROTATION); glVertex2d(0.8,-0.9);
-    glEnd();
-    glDisable( GL_TEXTURE_2D );
+    if(fpstex){
+        glEnable( GL_TEXTURE_2D );
+        glBindTexture( GL_TEXTURE_2D, fpstex );
+        glBegin(GL_QUADS);
+        glTexCoord2d(0.0,QT_TO_TEXTURE_ROTATION); glVertex2d(-1.0,0.9);
+        glTexCoord2d(1.0,QT_TO_TEXTURE_ROTATION); glVertex2d(-0.8,0.9);
+        glTexCoord2d(1.0,!QT_TO_TEXTURE_ROTATION); glVertex2d(-0.8,1.0);
+        glTexCoord2d(0.0,!QT_TO_TEXTURE_ROTATION); glVertex2d(-1.0,1.0);
+        glEnd();
+        glDisable( GL_TEXTURE_2D );
+    }
+    if(clocktex){
+        glEnable( GL_TEXTURE_2D );
+        glBindTexture( GL_TEXTURE_2D, clocktex );
+        glBegin(GL_QUADS);
+        glTexCoord2d(0.0,QT_TO_TEXTURE_ROTATION); glVertex2d(0.8,-1.0);
+        glTexCoord2d(1.0,QT_TO_TEXTURE_ROTATION); glVertex2d(1.0,-1.0);
+        glTexCoord2d(1.0,!QT_TO_TEXTURE_ROTATION); glVertex2d(1.0,-0.9);
+        glTexCoord2d(0.0,!QT_TO_TEXTURE_ROTATION); glVertex2d(0.8,-0.9);
+        glEnd();
+        glDisable( GL_TEXTURE_2D );
+    }
     qDebug()<<ENCAPS(tr("gl paint end"));
 }
 void ClientWidget::animate()
@@ -228,7 +157,7 @@ void ClientWidget::animate()
     clockpix=QPixmap(clocklcd.size());
     clockpix.fill(QColor("transparent"));
     clocklcd.render(&clockpix,QPoint(),QRegion(),RenderFlags(!DrawWindowBackground));
-    deleteTexture(clocktex);
+    if(clocktex) deleteTexture(clocktex);
     clocktex=bindTexture(clockpix,GL_TEXTURE_2D,GL_RGBA);
     updateGL();
     qDebug()<<ENCAPS(tr("animate() end"));
@@ -246,7 +175,7 @@ void ClientWidget::fpscalc()
     fpspix=QPixmap(fpslabel.size());
     fpspix.fill(QColor("transparent"));
     fpslabel.render(&fpspix,QPoint(),QRegion(),RenderFlags(!DrawWindowBackground));
-    deleteTexture(fpstex);
+    if(fpstex) deleteTexture(fpstex);
     fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGBA);
     ftmp+=frames;
     ftmp/=2.0f;
