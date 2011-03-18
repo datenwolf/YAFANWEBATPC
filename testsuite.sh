@@ -5,10 +5,16 @@ qm_dbgnotexflip="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=debug"
 qm_dbgtfqf="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=textureflip CONFIG+=qtToTextureFlip"
 qm_dbgntfqf="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=qtToTextureFlip"
 
+qm_main="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++"
+
+qm_list="CONFIG+=debug CONFIG+=qtToTextureFlip CONFIG+=textureflip"
+
+
 if [ "_$1" = "_-nested" ]
-    then for cfg in dbgtexflip dbgnotexflip dbgtfqf dbgntfqf
-        do [ -f Makefile ] && make distclean
-        eval "tmp=\$qm_${cfg}"
+    then for cfg1 in "" $qm_list ; do for cfg2 in "" $qm_list ; do for cfg3 in "" $qm_list ; do
+        [ -f Makefile ] && make distclean
+        tmp=$qm_main $cfg1 $cfg2 $cfg3
+        cfg=$(echo $tmp | base64 -w 0 | tr "=" "_")
         $tmp
         make > $cfg.make.stdout 2> $cfg.make.stderr
         ./yafanwebatpc > $cfg.stdout 2> $cfg.stderr &
@@ -17,7 +23,7 @@ if [ "_$1" = "_-nested" ]
         killall yafanwebatpc
         sleep 2
         killall -9 yafanwebatpc
-    done
+    done;done;done
 else
     git pull
     $0 -nested 2>&1 | tee suite.stdouterr
