@@ -39,8 +39,8 @@ ClientWidget::ClientWidget(QGLWidget *parent)
 ClientWidget::~ClientWidget()
 {
     qDebug()<<ENCAPS(tr("widget destruct"));
-    if(clocktex) deleteTexture(clocktex);
-    if(fpstex) deleteTexture(fpstex);
+    if(clocktex) { deleteTexture(clocktex); clocktex=0; }
+    if(fpstex) { deleteTexture(fpstex); fpstex=0; }
 
 }
 
@@ -157,7 +157,7 @@ void ClientWidget::animate()
     clockpix=QPixmap(clocklcd.size());
     clockpix.fill(QColor("transparent"));
     clocklcd.render(&clockpix,QPoint(),QRegion(),RenderFlags(!DrawWindowBackground));
-    if(clocktex) deleteTexture(clocktex);
+    if(clocktex) { deleteTexture(clocktex); clocktex=0; }
     clocktex=bindTexture(clockpix,GL_TEXTURE_2D,GL_RGBA);
     updateGL();
     qDebug()<<ENCAPS(tr("animate() end"));
@@ -175,7 +175,7 @@ void ClientWidget::fpscalc()
     fpspix=QPixmap(fpslabel.size());
     fpspix.fill(QColor("transparent"));
     fpslabel.render(&fpspix,QPoint(),QRegion(),RenderFlags(!DrawWindowBackground));
-    if(fpstex) deleteTexture(fpstex);
+    if(fpstex) { deleteTexture(fpstex); fpstex=0; }
     fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGBA);
     ftmp+=frames;
     ftmp/=2.0f;
