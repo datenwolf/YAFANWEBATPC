@@ -2,4 +2,5 @@
 moc_*
 Makefile
 yafanwebatpc
-*qm
+*.qm
+docs/YAFANWEBATPC.wiki/
