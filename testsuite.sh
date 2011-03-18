@@ -1,5 +1,9 @@
-#!/bin/bash -v
-
+#!/bin/bash
+if [ "_$1" = "_-get" ]
+then l=$(basename $2); l=${l//.png/} ; l=${l//"_"/"="} ; echo $l | base64 -d
+exit
+fi
+set -v
 qm_main="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++"
 
 qm_list="CONFIG+=debug CONFIG+=qtToTextureFlip CONFIG+=textureflip"
@@ -28,8 +32,9 @@ sleep 2
 killall -9 yafanwebatpc
 END
 for i in $qm_for ; do echo 'done' ;done >> testsuite.tmp
-bash testsuite.tmp
+bash -v testsuite.tmp
 else
     git pull
     $0 -nested 2>&1 | tee suite.stdouterr
 fi
+set +v
