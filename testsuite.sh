@@ -4,10 +4,10 @@ then l=$(basename $2); l=${l//.png/} ; l=${l//"_"/"="} ; echo $l | base64 -d
 exit
 fi
 set -v
-qm_main="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++"
+qm_main="qmake-qt4 yafanwebatpc.pro -r -spec linux-g++ CONFIG+=debug"
 
-qm_list="CONFIG+=debug CONFIG+=qtToTextureFlip CONFIG+=textureflip"
-qm_list_count=3
+qm_list="CONFIG+=qtToTextureFlip CONFIG+=textureflip"
+qm_list_count=2
 
 qm_for="$(seq 1 $qm_list_count)"
 if [ "_$1" = "_-nested" ]
