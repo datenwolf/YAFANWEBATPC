@@ -118,8 +118,8 @@ void ClientWidget::paintGL()
     for (QList<QVector3D>::iterator i = stars.begin(); i != stars.end(); ++i)
     {
         glBegin(GL_LINE);
-        glVertex3d(i->x(),i->y(),i->z());
-        glVertex3d(i->x(),i->y(),i->z()-(float)ftmp/10.0f);
+        glVertex3f(i->x(),i->y(),i->z());
+        glVertex3f(i->x(),i->y(),i->z()-(float)ftmp/10.0f);
         glEnd();
     }
 //**************************************************************************************************HUD
