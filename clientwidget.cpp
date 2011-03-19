@@ -186,5 +186,13 @@ void ClientWidget::keyReleaseEvent(QKeyEvent *e){
     qDebug()<<ENCAPS(tr("keyReleaseEvent() with key: "))<<e->key();
     if(e->key()==Qt::Key_Escape && e->modifiers() == Qt::ControlModifier){
         qApp->exit();
+    }else if(e->key()==Qt::Key_Escape){
+        qDebug()<<ENCAPS(tr("disconnecting from server..."));
+        emit disconnectFromServer();
     }
+}
+
+void ClientWidget::serverDisconnected(){
+    qDebug()<<ENCAPS(tr("server disconnected."));
+    qApp->exit();
 }

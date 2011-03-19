@@ -58,7 +58,7 @@ protected slots:
      void fpscalc();
      void keyReleaseEvent(QKeyEvent *);
      void messageFromServer(QDataStream& message){}
-     void serverDisconnected(){}
+     void serverDisconnected();
 signals:
      void logInToServer(QString server);
      void sendToServer(QDataStream& message);

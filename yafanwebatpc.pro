@@ -16,8 +16,7 @@ SOURCES += main.cpp\
     server.cpp \
     connection.cpp \
     loopbackconnection.cpp \
-    objparser.cpp \
-    objverttag.cpp
+    objparser.cpp
 
 HEADERS  += clientwidget.h \
     spaceobject.h \
@@ -25,9 +24,7 @@ HEADERS  += clientwidget.h \
     global_defines.h \
     connection.h \
     loopbackconnection.h \
-    objparser.h \
-    objtag.h \
-    objverttag.h
+    objparser.h
 
 CONFIG(debug, debug|release) {
 # here comes debug specific statements
