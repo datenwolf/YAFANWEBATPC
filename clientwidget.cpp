@@ -78,6 +78,8 @@ void ClientWidget::initializeGL()
 #endif
     fpscalc();
     glEnable(GL_LIGHT0);
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
     hudtex=bindTexture(hud,GL_TEXTURE_2D,GL_RGBA);
     qDebug()<<ENCAPS(tr("gl init done"));
 }
