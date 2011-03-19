@@ -48,6 +48,7 @@ TRANSLATIONS += $$system(cat languages.list)
 OTHER_FILES += \
     testsuite.sh \
     translate.sh \
+    get_impact.sh \
     languages.list \
     hud.png \
     $${TRANSLATIONS}
@@ -56,6 +57,7 @@ CODECFORTR = UTF-8
 COPY_FILES = $${OTHER_FILES}
 
 QMAKE_POST_LINK += $$quote(./translate.sh $${PWD}/$$escape_expand(\\n\\t))
+QMAKE_POST_LINK += $$quote(./get_impact.sh $$escape_expand(\\n\\t))
 for(FILE,COPY_FILES){
     QMAKE_PRE_LINK += $$quote(test "_$${PWD}_" = "_$${OUT_PWD}_" || cp $${PWD}/$${FILE} $${OUT_PWD}/$$escape_expand(\\n\\t))
 }
