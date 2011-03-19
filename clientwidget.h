@@ -14,6 +14,7 @@
 #include <QBitmap>
 #include "spaceobject.h"
 #include "global_defines.h"
+#include "glspaceobject.h"
 #ifdef QT_TO_TEXTURE_FLIP
 #define QT_TO_TEXTURE_ROTATION 0
 #else
@@ -53,6 +54,7 @@ private:
      QImage hud;
      GLuint hudtex;
      QBitmap emptybm;
+     GLSpaceObject teapot;
 protected slots:
      void animate();
      void fpscalc();

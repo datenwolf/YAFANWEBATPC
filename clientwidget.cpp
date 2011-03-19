@@ -5,7 +5,7 @@
 #include <QBitmap>
 #include <QApplication>
 #include <QKeyEvent>
-
+#include <GL/glut.h>
 QList<QPolygonF> text2polylist(char* font, int size, QString str){
     QPainterPath path;
     path.addText(QPointF(0, 0), QFont(font, size), QString(str));
@@ -34,6 +34,7 @@ ClientWidget::ClientWidget(QGLWidget *parent)
     radar_tr=QPointF(0.4f * cos(2.35619449), 0.2f * sin(2.35619449) -0.8f);
     hud.load("hud.png");
     emptybm.clear();
+    teapot.size=F2I(0.5f); //==0.5f
 }
 
 ClientWidget::~ClientWidget()
@@ -47,6 +48,8 @@ ClientWidget::~ClientWidget()
 void ClientWidget::initializeGL()
 {
     qDebug()<<ENCAPS(tr("gl init"));
+    int argc=qApp->argc();            //quick workaround for "lvalue required for unary & operand"
+    glutInit(&argc,qApp->argv());     // in "&argc()"
     glClearColor(0, 0, 0, 0.0);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);         // The Type Of Depth Test To Do
@@ -74,6 +77,7 @@ void ClientWidget::initializeGL()
     glMatrixMode(GL_MODELVIEW);
 #endif
     fpscalc();
+    glEnable(GL_LIGHT0);
     hudtex=bindTexture(hud,GL_TEXTURE_2D,GL_RGBA);
     qDebug()<<ENCAPS(tr("gl init done"));
 }
@@ -113,6 +117,7 @@ void ClientWidget::paintGL()
     qDebug()<<ENCAPS(tr("gl paint start"));
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
     glLoadIdentity();					// Reset The Current Modelview Matrix
+//**************************************************************************************************STARS
     qsrand(0);
     glBegin(GL_POINTS);
     glColor3f(1,1,1);
@@ -121,7 +126,12 @@ void ClientWidget::paintGL()
         glVertex2f(((float)(qrand()%100-50))/50.0f,((float)(qrand()%100-50))/50.0f);
     }
     glEnd();
+//**************************************************************************************************SCENE
+    glEnable(GL_LIGHTING);
     glColor4f(1,1,1,1);
+    teapot.render();
+    glDisable(GL_LIGHTING);
+//**************************************************************************************************HUD
     drawHUD();
     if(fpstex){
         glEnable( GL_TEXTURE_2D );

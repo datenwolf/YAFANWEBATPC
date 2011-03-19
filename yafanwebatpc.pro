@@ -9,20 +9,22 @@ QT       += core gui opengl
 TARGET = yafanwebatpc
 TEMPLATE = app
 
-
+LIBS += -lglut
 SOURCES += main.cpp\
         clientwidget.cpp \
     spaceobject.cpp \
     server.cpp \
     connection.cpp \
-    loopbackconnection.cpp
+    loopbackconnection.cpp \
+    glspaceobject.cpp
 
 HEADERS  += clientwidget.h \
     spaceobject.h \
     server.h \
     global_defines.h \
     connection.h \
-    loopbackconnection.h
+    loopbackconnection.h \
+    glspaceobject.h
 
 CONFIG(debug, debug|release) {
 # here comes debug specific statements

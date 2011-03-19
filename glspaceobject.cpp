@@ -1,10 +1,17 @@
-#include "spaceobject.h"
+#include "glspaceobject.h"
+#include "GL/glut.h"
+#include "global_defines.h"
 
-SpaceObject::SpaceObject(QObject *parent) :
-    QObject(parent)
+GLSpaceObject::GLSpaceObject()
 {
 }
-QDataStream &operator<<(QDataStream& s, const SpaceObject& o){
+
+void GLSpaceObject::render(){
+    glutSolidTeapot(I2F(size));
+}
+
+
+QDataStream &operator<<(QDataStream& s, const GLSpaceObject& o){
     s << "%SPACEOBJECT%";
     s << o.objtype;
     s << o.flags;
@@ -16,7 +23,7 @@ QDataStream &operator<<(QDataStream& s, const SpaceObject& o){
     return s;
 }
 
-QDataStream &operator>>(QDataStream& s, SpaceObject& o){
+QDataStream &operator>>(QDataStream& s, GLSpaceObject& o){
     char* n;
     s >> n;
     if(QString("%SPACEOBJECT%").compare(n)==0){

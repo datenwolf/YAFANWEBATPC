@@ -13,7 +13,8 @@ public:
     QVector3D position;
     QVector3D velocity;
     QVector3D rotation; //right hand rule rotation around axes.
-
+    QVector3D rotvel;
+    qint32 size;
 signals:
 
 public slots:
