@@ -119,21 +119,15 @@ void ClientWidget::paintGL()
     qDebug()<<ENCAPS(tr("gl paint start"));
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
     glLoadIdentity();					// Reset The Current Modelview Matrix
-//**************************************************************************************************STARS
-    qsrand(0);
-    glBegin(GL_POINTS);
-    glColor3f(1,1,1);
-    for (int i=0;i<100;i++)
-    {
-        glVertex2f(((float)(qrand()%100-50))/50.0f,((float)(qrand()%100-50))/50.0f);
-    }
-    glEnd();
-//**************************************************************************************************SCENE
     glEnable(GL_LIGHTING);
     glColor4f(1,1,1,1);
+//**************************************************************************************************SCENE
+    glTranslated(0,0,1);
     teapot.render();
-    glDisable(GL_LIGHTING);
 //**************************************************************************************************HUD
+    glDisable(GL_LIGHTING);
+    glLoadIdentity();					// Reset The Current Modelview Matrix
+    glColor4f(1,1,1,1);
     drawHUD();
     if(fpstex){
         glEnable( GL_TEXTURE_2D );
