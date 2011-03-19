@@ -7,7 +7,9 @@ GLSpaceObject::GLSpaceObject()
 }
 
 void GLSpaceObject::render(){
+    glFrontFace(GL_CW);
     glutSolidTeapot(I2F(size));
+    glFrontFace(GL_CCW);
 }
 
 

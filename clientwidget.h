@@ -39,12 +39,6 @@ protected:
 private:
      SpaceObject me;
      int frames; float ftmp;
-     QList<QPointF> led1circle;
-     QList<QPointF> radar;
-     QList<QPointF> halfradar;
-     QPointF radar_tl;
-     QPointF radar_tr;
-     bool led1ON;
      QLabel fpslabel;
      QPixmap fpspix;
      GLuint fpstex;
@@ -55,6 +49,7 @@ private:
      GLuint hudtex;
      QBitmap emptybm;
      GLSpaceObject teapot;
+     QList<QVector3D> stars;
 protected slots:
      void animate();
      void fpscalc();

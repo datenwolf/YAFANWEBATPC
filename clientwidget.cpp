@@ -6,13 +6,6 @@
 #include <QApplication>
 #include <QKeyEvent>
 #include <GL/glut.h>
-QList<QPolygonF> text2polylist(char* font, int size, QString str){
-    QPainterPath path;
-    path.addText(QPointF(0, 0), QFont(font, size), QString(str));
-    return path.toSubpathPolygons();
-}
-
-
 
 ClientWidget::ClientWidget(QGLWidget *parent)
     : QGLWidget(parent)
@@ -22,19 +15,19 @@ ClientWidget::ClientWidget(QGLWidget *parent)
     clocktex=0;
     fpslabel.setStyleSheet(tr("QLabel { background: transparent; color : white; font-size: 32px; }"));
     clocklcd.setStyleSheet(tr("QLCDNumber { background: transparent; color : white; height: 32px; }"));
-    led1ON=false;
-    for(float t = 0; t <= 6.28f; t += 0.06f){
-        radar.append(QPointF(0.4f * cos(t), 0.2f * sin(t) -0.8f));
-    }
-    for(float t = 0; t <= 6.28f; t += 0.12f){
-        halfradar.append(QPointF(0.2f * cos(t), 0.1f * sin(t) -0.8f));
-        led1circle.append(QPointF(cos(t)*0.02f-0.9f, sin(t)*0.02f-0.8f));
-    }
-    radar_tl=QPointF(0.4f * cos(0.785398163), 0.2f * sin(0.785398163) -0.8f);
-    radar_tr=QPointF(0.4f * cos(2.35619449), 0.2f * sin(2.35619449) -0.8f);
     hud.load("hud.png");
     emptybm.clear();
-    teapot.size=F2I(0.5f); //==0.5f
+    teapot.size=F2I(0.1f);
+    qsrand(0);
+    for (int i=0;i<6000;i++)
+    {
+        float r=100;
+        float theta=(float)(qrand()%628318)/100000.0f;
+        float phi=(float)(qrand()%628318)/100000.0f;
+        QVector3D v(r*sin(theta)*cos(phi), r*sin(theta)*sin(phi), r*cos(theta));
+        stars.append(v);
+        qDebug()<<v;
+    }
 }
 
 ClientWidget::~ClientWidget()
@@ -89,10 +82,10 @@ void ClientWidget::drawHUD()
         glEnable( GL_TEXTURE_2D );
         glBindTexture( GL_TEXTURE_2D, hudtex );
         glBegin(GL_QUADS);
-        glTexCoord2d(0.0,0.0); glVertex2d(-1.0,-1.0);
-        glTexCoord2d(1.0,0.0); glVertex2d( 1.0,-1.0);
-        glTexCoord2d(1.0,1.0); glVertex2d( 1.0, 1.0);
-        glTexCoord2d(0.0,1.0); glVertex2d(-1.0, 1.0);
+        glTexCoord2d(0.0,0.0); glVertex3d( 1.0,-1.0,1);
+        glTexCoord2d(1.0,0.0); glVertex3d(-1.0,-1.0,1);
+        glTexCoord2d(1.0,1.0); glVertex3d(-1.0, 1.0,1);
+        glTexCoord2d(0.0,1.0); glVertex3d( 1.0, 1.0,1);
         glEnd();
         glDisable( GL_TEXTURE_2D );
     }
@@ -102,14 +95,10 @@ void ClientWidget::resizeGL(int w, int h)
 {
     qDebug()<<ENCAPS(tr("gl resize"));
     glMatrixMode(GL_PROJECTION);
-    glViewport(0, 0, (GLint)w, (GLint)h);
-    gluPerspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100000.0f);
-    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0.0, 0.0, 0.0,
-              0.0, 0.0, -1.0,
-              0.0, 1.0, 0.0);
-    glMatrixMode(GL_PROJECTION);
+    glViewport(0, 0, (GLint)w, (GLint)h);
+    gluPerspective(90,1/*(GLfloat)w/(GLfloat)h*/,0.1,1000);
+    glMatrixMode(GL_MODELVIEW);
     qDebug()<<ENCAPS(tr("gl resize done"));
 }
 
@@ -117,26 +106,33 @@ void ClientWidget::paintGL()
 {
     frames+=1;
     qDebug()<<ENCAPS(tr("gl paint start"));
+    glMatrixMode(GL_MODELVIEW);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
     glLoadIdentity();					// Reset The Current Modelview Matrix
-    glEnable(GL_LIGHTING);
-    glColor4f(1,1,1,1);
-//**************************************************************************************************SCENE
-    glTranslated(0,0,1);
-    teapot.render();
-//**************************************************************************************************HUD
     glDisable(GL_LIGHTING);
-    glLoadIdentity();					// Reset The Current Modelview Matrix
+    gluLookAt(0.0, 0.0, 0.0,
+              0.0, 0.0, 1.0,
+              0.0, 1.0, 0.0);
+//**************************************************************************************************STARS
+    glColor3f(1,1,1);
+    for (QList<QVector3D>::iterator i = stars.begin(); i != stars.end(); ++i)
+    {
+        glBegin(GL_LINE);
+        glVertex3d(i->x(),i->y(),i->z());
+        glVertex3d(i->x(),i->y(),i->z()-(float)ftmp/10.0f);
+        glEnd();
+    }
+//**************************************************************************************************HUD
     glColor4f(1,1,1,1);
     drawHUD();
     if(fpstex){
         glEnable( GL_TEXTURE_2D );
         glBindTexture( GL_TEXTURE_2D, fpstex );
         glBegin(GL_QUADS);
-        glTexCoord2d(0.0,QT_TO_TEXTURE_ROTATION); glVertex2d(-1.0,0.9);
-        glTexCoord2d(1.0,QT_TO_TEXTURE_ROTATION); glVertex2d(-0.8,0.9);
-        glTexCoord2d(1.0,!QT_TO_TEXTURE_ROTATION); glVertex2d(-0.8,1.0);
-        glTexCoord2d(0.0,!QT_TO_TEXTURE_ROTATION); glVertex2d(-1.0,1.0);
+        glTexCoord2d(0.0,QT_TO_TEXTURE_ROTATION); glVertex3d(1.0,0.9,1);
+        glTexCoord2d(1.0,QT_TO_TEXTURE_ROTATION); glVertex3d(0.8,0.9,1);
+        glTexCoord2d(1.0,!QT_TO_TEXTURE_ROTATION); glVertex3d(0.8,1.0,1);
+        glTexCoord2d(0.0,!QT_TO_TEXTURE_ROTATION); glVertex3d(1.0,1.0,1);
         glEnd();
         glDisable( GL_TEXTURE_2D );
     }
@@ -144,20 +140,27 @@ void ClientWidget::paintGL()
         glEnable( GL_TEXTURE_2D );
         glBindTexture( GL_TEXTURE_2D, clocktex );
         glBegin(GL_QUADS);
-        glTexCoord2d(0.0,QT_TO_TEXTURE_ROTATION); glVertex2d(0.8,-1.0);
-        glTexCoord2d(1.0,QT_TO_TEXTURE_ROTATION); glVertex2d(1.0,-1.0);
-        glTexCoord2d(1.0,!QT_TO_TEXTURE_ROTATION); glVertex2d(1.0,-0.9);
-        glTexCoord2d(0.0,!QT_TO_TEXTURE_ROTATION); glVertex2d(0.8,-0.9);
+        glTexCoord2d(0.0,QT_TO_TEXTURE_ROTATION); glVertex3d(-0.8,-1.0,1);
+        glTexCoord2d(1.0,QT_TO_TEXTURE_ROTATION); glVertex3d(-1.0,-1.0,1);
+        glTexCoord2d(1.0,!QT_TO_TEXTURE_ROTATION); glVertex3d(-1.0,-0.9,1);
+        glTexCoord2d(0.0,!QT_TO_TEXTURE_ROTATION); glVertex3d(-0.8,-0.9,1);
         glEnd();
         glDisable( GL_TEXTURE_2D );
     }
+    glEnable(GL_LIGHTING);
+    glColor4f(0.8,0.8,0.8,1);
+//**************************************************************************************************SCENE
+    glTranslatef(-0.2,0.5,0.9);
+    glRotated(180,0,1,0);
+    glRotated(45,1,0,0);
+    glRotated(45,0,0,1);
+    teapot.render();
     qDebug()<<ENCAPS(tr("gl paint end"));
 }
 void ClientWidget::animate()
 {
     qDebug()<<ENCAPS(tr("animate() start"));
     QDateTime now=QDateTime::currentDateTime();
-    led1ON=now.toTime_t()%2;
     clocklcd.display(QString::number(now.time().hour()).append(":").append(QString::number(now.time().minute())));
     clocklcd.resize(clocklcd.sizeHint());
     clockpix=QPixmap(clocklcd.size());
