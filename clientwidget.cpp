@@ -152,6 +152,10 @@ void ClientWidget::paintGL()
         glDisable( GL_TEXTURE_2D );
     }
     float l[]={0.2,0.5,1,1};
+    glBegin(GL_POINTS);
+    glColor4f(1,0,0,1);
+    glVertex3fv(l);
+    glEnd();
     glLightfv(GL_LIGHT0,GL_POSITION,l);
     glEnable(GL_LIGHTING);
     glColor4f(0.8,0.8,0.8,1);
