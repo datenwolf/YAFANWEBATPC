@@ -21,7 +21,7 @@ ClientWidget::ClientWidget(QGLWidget *parent)
     qsrand(0);
     for (int i=0;i<6000;i++)
     {
-        float r=100;
+        float r=999;
         float theta=(float)(qrand()%628318)/100000.0f;
         float phi=(float)(qrand()%628318)/100000.0f;
         QVector3D v(r*sin(theta)*cos(phi), r*sin(theta)*sin(phi), r*cos(theta));
@@ -76,20 +76,6 @@ void ClientWidget::initializeGL()
     hudtex=bindTexture(hud,GL_TEXTURE_2D,GL_RGBA);
     qDebug()<<ENCAPS(tr("gl init done"));
 }
-void ClientWidget::drawHUD()
-{
-    if(hudtex){
-        glEnable( GL_TEXTURE_2D );
-        glBindTexture( GL_TEXTURE_2D, hudtex );
-        glBegin(GL_QUADS);
-        glTexCoord2d(0.0,0.0); glVertex3d( 1.0,-1.0,1);
-        glTexCoord2d(1.0,0.0); glVertex3d(-1.0,-1.0,1);
-        glTexCoord2d(1.0,1.0); glVertex3d(-1.0, 1.0,1);
-        glTexCoord2d(0.0,1.0); glVertex3d( 1.0, 1.0,1);
-        glEnd();
-        glDisable( GL_TEXTURE_2D );
-    }
-}
 
 void ClientWidget::resizeGL(int w, int h)
 {
@@ -110,33 +96,40 @@ void ClientWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
     glLoadIdentity();					// Reset The Current Modelview Matrix
     glDisable(GL_LIGHTING);
-    gluLookAt(0.0, 0.0, 0.0,
-              0.0, 0.0, 1.0,
-              0.0, 1.0, 0.0);
 //**************************************************************************************************STARS
     glColor3f(1,1,1);
     for (QList<QVector3D>::iterator i = stars.begin(); i != stars.end(); ++i)
     {
-        if(i->z()>0){
+        if(i->z()<0){
             glBegin(GL_LINE);
             glColor4f(1,1,1,1);
             glVertex3f(i->x(),i->y(),i->z());
             glColor4f(1,1,1,0);
-            glVertex3f(i->x(),i->y(),i->z()-(float)ftmp/5.0f);
+            glVertex3f(i->x(),i->y(),i->z()+(float)ftmp);
             glEnd();
         }
     }
 //**************************************************************************************************HUD
     glColor4f(1,1,1,1);
-    drawHUD();
+    if(hudtex){
+        glEnable( GL_TEXTURE_2D );
+        glBindTexture( GL_TEXTURE_2D, hudtex );
+        glBegin(GL_QUADS);
+        glTexCoord2d(0.0,0.0); glVertex3d(-1.0,-1.0,-1);
+        glTexCoord2d(1.0,0.0); glVertex3d( 1.0,-1.0,-1);
+        glTexCoord2d(1.0,1.0); glVertex3d( 1.0, 1.0,-1);
+        glTexCoord2d(0.0,1.0); glVertex3d(-1.0, 1.0,-1);
+        glEnd();
+        glDisable( GL_TEXTURE_2D );
+    }
     if(fpstex){
         glEnable( GL_TEXTURE_2D );
         glBindTexture( GL_TEXTURE_2D, fpstex );
         glBegin(GL_QUADS);
-        glTexCoord2d(0.0,QT_TO_TEXTURE_ROTATION); glVertex3d(1.0,0.9,1);
-        glTexCoord2d(1.0,QT_TO_TEXTURE_ROTATION); glVertex3d(0.8,0.9,1);
-        glTexCoord2d(1.0,!QT_TO_TEXTURE_ROTATION); glVertex3d(0.8,1.0,1);
-        glTexCoord2d(0.0,!QT_TO_TEXTURE_ROTATION); glVertex3d(1.0,1.0,1);
+        glTexCoord2d(0.0,QT_TO_TEXTURE_ROTATION); glVertex3d(-1.0,0.9,-1);
+        glTexCoord2d(1.0,QT_TO_TEXTURE_ROTATION); glVertex3d(-0.8,0.9,-1);
+        glTexCoord2d(1.0,!QT_TO_TEXTURE_ROTATION); glVertex3d(-0.8,1.0,-1);
+        glTexCoord2d(0.0,!QT_TO_TEXTURE_ROTATION); glVertex3d(-1.0,1.0,-1);
         glEnd();
         glDisable( GL_TEXTURE_2D );
     }
@@ -144,14 +137,16 @@ void ClientWidget::paintGL()
         glEnable( GL_TEXTURE_2D );
         glBindTexture( GL_TEXTURE_2D, clocktex );
         glBegin(GL_QUADS);
-        glTexCoord2d(0.0,QT_TO_TEXTURE_ROTATION); glVertex3d(-0.8,-1.0,1);
-        glTexCoord2d(1.0,QT_TO_TEXTURE_ROTATION); glVertex3d(-1.0,-1.0,1);
-        glTexCoord2d(1.0,!QT_TO_TEXTURE_ROTATION); glVertex3d(-1.0,-0.9,1);
-        glTexCoord2d(0.0,!QT_TO_TEXTURE_ROTATION); glVertex3d(-0.8,-0.9,1);
+        glTexCoord2d(0.0,QT_TO_TEXTURE_ROTATION); glVertex3d(0.8,-1.0,-1);
+        glTexCoord2d(1.0,QT_TO_TEXTURE_ROTATION); glVertex3d(1.0,-1.0,-1);
+        glTexCoord2d(1.0,!QT_TO_TEXTURE_ROTATION); glVertex3d(1.0,-0.9,-1);
+        glTexCoord2d(0.0,!QT_TO_TEXTURE_ROTATION); glVertex3d(0.8,-0.9,-1);
         glEnd();
         glDisable( GL_TEXTURE_2D );
     }
+//**************************************************************************************************SCENE
     float l[]={0.2,0.5,1,1};
+    glLoadIdentity();					// Reset The Current Modelview Matrix
     glBegin(GL_POINTS);
     glColor4f(1,0,0,1);
     glVertex3fv(l);
@@ -159,8 +154,10 @@ void ClientWidget::paintGL()
     glLightfv(GL_LIGHT0,GL_POSITION,l);
     glEnable(GL_LIGHTING);
     glColor4f(0.8,0.8,0.8,1);
-//**************************************************************************************************SCENE
-    glTranslatef(-0.2,0.5,0.9);
+    gluLookAt(me.position.x(), me.position.y(),      me.position.z(),
+              me.position.x(), me.position.y(),      me.position.z()+1.0f,
+              me.position.x(), me.position.y()+1.0f, me.position.z());
+    glTranslatef(-0.2,0.5,1);
     glRotated(180,0,1,0);
     glRotated(45,1,0,0);
     glRotated(45,0,0,1);

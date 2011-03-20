@@ -35,7 +35,6 @@ protected:
      void initializeGL();
      void resizeGL(int w, int h);
      void paintGL();
-     void drawHUD();
 private:
      SpaceObject me;
      int frames; float ftmp;
