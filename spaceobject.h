@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVector3D>
+#include <GL/gl.h>
 class SpaceObject : public QObject
 {
     Q_OBJECT
@@ -15,6 +16,7 @@ public:
     QVector3D rotation; //right hand rule rotation around axes.
     QVector3D rotvel;
     qint32 size;
+    GLfloat* posfv(){ float f[]={position.x(),position.y(),position.z()}; return f; }
 signals:
 
 public slots:

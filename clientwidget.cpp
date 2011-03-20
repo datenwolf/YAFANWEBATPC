@@ -117,12 +117,14 @@ void ClientWidget::paintGL()
     glColor3f(1,1,1);
     for (QList<QVector3D>::iterator i = stars.begin(); i != stars.end(); ++i)
     {
-        glBegin(GL_LINE);
-        glColor4f(1,1,1,1);
-        glVertex3f(i->x(),i->y(),i->z());
-        glColor4f(1,1,1,0);
-        glVertex3f(i->x(),i->y(),i->z()-(float)ftmp/5.0f);
-        glEnd();
+        if(i->z()>0){
+            glBegin(GL_LINE);
+            glColor4f(1,1,1,1);
+            glVertex3f(i->x(),i->y(),i->z());
+            glColor4f(1,1,1,0);
+            glVertex3f(i->x(),i->y(),i->z()-(float)ftmp/5.0f);
+            glEnd();
+        }
     }
 //**************************************************************************************************HUD
     glColor4f(1,1,1,1);
@@ -149,6 +151,8 @@ void ClientWidget::paintGL()
         glEnd();
         glDisable( GL_TEXTURE_2D );
     }
+    float l[]={0.2,0.5,1,1};
+    glLightfv(GL_LIGHT0,GL_POSITION,l);
     glEnable(GL_LIGHTING);
     glColor4f(0.8,0.8,0.8,1);
 //**************************************************************************************************SCENE
