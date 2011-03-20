@@ -15,12 +15,17 @@
 #include "spaceobject.h"
 #include "global_defines.h"
 #include "glspaceobject.h"
+#include <FTGL/ftgl.h>
 #ifdef QT_TO_TEXTURE_FLIP
 #define QT_TO_TEXTURE_ROTATION 0
 #else
 #define QT_TO_TEXTURE_ROTATION 1
 #endif
-
+#define CWRF_BOTTOM 0
+#define CWRF_TOP 1
+#define CWRF_LEFT 0
+#define CWRF_RIGHT 1
+#define CWRF_CENTER 2
 
 class ClientWidget : public QGLWidget
 {
@@ -35,20 +40,18 @@ protected:
      void initializeGL();
      void resizeGL(int w, int h);
      void paintGL();
+     void renderFont(FTPixmapFont* f, QString s, float x,float y,int lr,int tb);
 private:
      SpaceObject me;
      int frames; float ftmp;
-     QLabel fpslabel;
-     QPixmap fpspix;
-     GLuint fpstex;
-     QLCDNumber clocklcd;
-     QPixmap clockpix;
-     GLuint clocktex;
+     QString fps;
+     QString clock;
      QImage hud;
      GLuint hudtex;
      QBitmap emptybm;
      GLSpaceObject teapot;
      QList<QVector3D> stars;
+     FTPixmapFont* font;
 protected slots:
      void animate();
      void fpscalc();

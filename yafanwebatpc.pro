@@ -9,14 +9,15 @@ QT       += core gui opengl
 TARGET = yafanwebatpc
 TEMPLATE = app
 
-LIBS += -lglut
+LIBS += -lglut -lopenctm -lftgl
 SOURCES += main.cpp\
         clientwidget.cpp \
     spaceobject.cpp \
     server.cpp \
     connection.cpp \
     loopbackconnection.cpp \
-    glspaceobject.cpp
+    glspaceobject.cpp \
+    ctmspaceobject.cpp
 
 HEADERS  += clientwidget.h \
     spaceobject.h \
@@ -24,8 +25,9 @@ HEADERS  += clientwidget.h \
     global_defines.h \
     connection.h \
     loopbackconnection.h \
-    glspaceobject.h
-
+    glspaceobject.h \
+    ctmspaceobject.h
+INCLUDEPATH += /usr/include/freetype2
 CONFIG(debug, debug|release) {
 # here comes debug specific statements
     QMAKE_CXXFLAGS += -g -pg
@@ -51,6 +53,7 @@ OTHER_FILES += \
     get_impact.sh \
     languages.list \
     hud.png \
+    arial.ttf \
     $${TRANSLATIONS}
 CODECFORTR = UTF-8
 
