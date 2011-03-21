@@ -12,9 +12,6 @@ ClientWidget::ClientWidget(QGLWidget *parent)
 {
     qDebug()<<ENCAPS(tr("widget init"));
     frames=0;ftmp=0;
-//    clocktex=0;
-//    fpslabel.setStyleSheet(tr("QLabel { background: transparent; color : white; font-size: 32px; }"));
-//    clocklcd.setStyleSheet(tr("QLCDNumber { background: transparent; color : white; height: 32px; }"));
     hud.load("hud.png");
     emptybm.clear();
     teapot.size=F2I(0.1f);
@@ -54,9 +51,6 @@ void ClientWidget::renderFont(FTPixmapFont* f,QString s, float x,float y,int lr,
 ClientWidget::~ClientWidget()
 {
     qDebug()<<ENCAPS(tr("widget destruct"));
-//    if(clocktex) { deleteTexture(clocktex); clocktex=0; }
-//    if(fpstex) { deleteTexture(fpstex); fpstex=0; }
-
 }
 
 void ClientWidget::initializeGL()
@@ -119,7 +113,6 @@ void ClientWidget::paintGL()
     gluPerspective(90,(float)width()/(float)height(),0.1,1000);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glEnable(GL_DEPTH_TEST);
   //**************************************************************************************************STARS
     glColor3f(1,1,1);
     for (QList<QVector3D>::iterator i = stars.begin(); i != stars.end(); ++i)
@@ -135,6 +128,7 @@ void ClientWidget::paintGL()
     }
 //**************************************************************************************************SCENE
     float l[]={0.2,0.5,1,1};
+    glEnable(GL_DEPTH_TEST);
     glBegin(GL_POINTS);
     glColor4f(1,0,0,1);
     glVertex3fv(l);
@@ -145,7 +139,7 @@ void ClientWidget::paintGL()
     gluLookAt(me.position.x(), me.position.y(),      me.position.z(),
               me.position.x(), me.position.y(),      me.position.z()+1.0f,
               me.position.x(), me.position.y()+1.0f, me.position.z());
-    glTranslatef(-0.2,0.5,1);
+    glTranslatef(-0.2,0.5,2);
     glRotated(180,0,1,0);
     glRotated(45,1,0,0);
     glRotated(45,0,0,1);
@@ -183,13 +177,6 @@ void ClientWidget::animate()
     if(now.time().hour()<10) h.prepend("0");
     if(now.time().minute()<10) m.prepend("0");
     clock=h.append(":").append(m);
-/*    clocklcd.display(QString::number(now.time().hour()).append(":").append(QString::number(now.time().minute())));
-    clocklcd.resize(clocklcd.sizeHint());
-    clockpix=QPixmap(clocklcd.size());
-    clockpix.fill(QColor("transparent"));
-    clocklcd.render(&clockpix,QPoint(),QRegion(),RenderFlags(!DrawWindowBackground));
-    if(clocktex) { deleteTexture(clocktex); clocktex=0; }
-    clocktex=bindTexture(clockpix,GL_TEXTURE_2D,GL_RGBA);*/
     updateGL();
     qDebug()<<ENCAPS(tr("animate() end"));
 }
@@ -202,13 +189,6 @@ void ClientWidget::fpscalc()
     if(idx >0)
         text=text.left(idx+2);
     fps=text.append(tr(" FPS"));
-/*    fpslabel.setText(text.append(tr(" FPS")));
-    fpslabel.resize(fpslabel.sizeHint());
-    fpspix=QPixmap(fpslabel.size());
-    fpspix.fill(QColor("transparent"));
-    fpslabel.render(&fpspix,QPoint(),QRegion(),RenderFlags(!DrawWindowBackground));
-    if(fpstex) { deleteTexture(fpstex); fpstex=0; }
-    fpstex=bindTexture(fpspix,GL_TEXTURE_2D,GL_RGBA);*/
     ftmp+=frames;
     ftmp/=2.0f;
     frames=0;
