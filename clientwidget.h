@@ -15,7 +15,10 @@
 #include "spaceobject.h"
 #include "global_defines.h"
 #include "glspaceobject.h"
+#include "ctmspaceobject.h"
 #include <FTGL/ftgl.h>
+#include <QGLShaderProgram>
+#include <QGLShader>
 #ifdef QT_TO_TEXTURE_FLIP
 #define QT_TO_TEXTURE_ROTATION 0
 #else
@@ -42,6 +45,7 @@ protected:
      void paintGL();
      void renderFont(FTPixmapFont* f, QString s, float x,float y,int lr,int tb);
 private:
+     QGLShaderProgram lightingprogram;
      SpaceObject me;
      int frames; float ftmp;
      QString fps;
@@ -50,6 +54,7 @@ private:
      GLuint hudtex;
      QBitmap emptybm;
      GLSpaceObject teapot;
+     CTMSpaceObject bunny;
      QList<QVector3D> stars;
      FTPixmapFont* font;
 protected slots:

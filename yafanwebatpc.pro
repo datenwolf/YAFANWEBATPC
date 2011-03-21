@@ -54,7 +54,9 @@ OTHER_FILES += \
     languages.list \
     hud.png \
     arial.ttf \
-    $${TRANSLATIONS}
+    bunny.ctm \
+    $${TRANSLATIONS} \
+    light.frag
 CODECFORTR = UTF-8
 
 COPY_FILES = $${OTHER_FILES}

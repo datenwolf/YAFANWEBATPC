@@ -91,6 +91,19 @@ void ClientWidget::initializeGL()
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
     hudtex=bindTexture(hud,GL_TEXTURE_2D,GL_RGBA);
+    bunny.load("bunny.ctm");
+    lightingprogram.addShaderFromSourceCode(QGLShader::Vertex,
+                                            "varying vec3 N;\n"
+                                            "varying vec3 v;\n"
+                                            "void main(void) {\n"
+                                            "   v = vec3(gl_ModelViewMatrix * gl_Vertex);\n"
+                                            "   N = normalize(gl_NormalMatrix * gl_Normal);\n"
+                                            "   gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;\n"
+                                            "}\n");
+    lightingprogram.addShaderFromSourceFile(QGLShader::Fragment,"light.frag");
+    lightingprogram.link();
+    lightingprogram.setUniformValue("MAX_LIGHTS",1);
+
     qDebug()<<ENCAPS(tr("gl init done"));
 }
 
@@ -128,6 +141,7 @@ void ClientWidget::paintGL()
     }
 //**************************************************************************************************SCENE
     float l[]={0.2,0.5,1,1};
+    lightingprogram.bind();
     glEnable(GL_DEPTH_TEST);
     glBegin(GL_POINTS);
     glColor4f(1,0,0,1);
@@ -136,14 +150,25 @@ void ClientWidget::paintGL()
     glLightfv(GL_LIGHT0,GL_POSITION,l);
     glEnable(GL_LIGHTING);
     glColor4f(0.8,0.8,0.8,1);
+    glLoadIdentity();
     gluLookAt(me.position.x(), me.position.y(),      me.position.z(),
               me.position.x(), me.position.y(),      me.position.z()+1.0f,
               me.position.x(), me.position.y()+1.0f, me.position.z());
-    glTranslatef(-0.2,0.5,2);
+    glTranslatef(-0.1,0.2,0.5);
     glRotated(180,0,1,0);
     glRotated(45,1,0,0);
     glRotated(45,0,0,1);
+    GLfloat whiteSpecularMaterial[] = {1.0, 1.0, 1.0};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, whiteSpecularMaterial);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS,128);
     teapot.render();
+    glLoadIdentity();
+    gluLookAt(me.position.x(), me.position.y(),      me.position.z(),
+              me.position.x(), me.position.y(),      me.position.z()+1.0f,
+              me.position.x(), me.position.y()+1.0f, me.position.z());
+    glScaled(20,20,20);
+    bunny.render();
+    lightingprogram.release();
 //**************************************************************************************************HUD
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
