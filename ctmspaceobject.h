@@ -11,7 +11,7 @@ public:
     void render();
     QString filename;
     CTMuint vertCount, triCount, * indices;
-    CTMfloat * vertices;
+    CTMfloat * vertices, *normals;
     CTMimporter ctm;
 };
 QDataStream &operator<<(QDataStream &, const CTMSpaceObject &);

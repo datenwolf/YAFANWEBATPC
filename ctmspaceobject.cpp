@@ -7,6 +7,7 @@ CTMSpaceObject::CTMSpaceObject()
 void CTMSpaceObject::render(){
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, vertices);
+    glNormalPointer(GL_FLOAT,0,normals);
     glDrawElements(GL_TRIANGLES,  triCount*3, GL_UNSIGNED_INT, indices);
     glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -15,6 +16,7 @@ void CTMSpaceObject::load(QString fn){
     ctm.Load(filename.toUtf8().data());
     vertCount = ctm.GetInteger(CTM_VERTEX_COUNT);
     vertices =(CTMfloat*) ctm.GetFloatArray(CTM_VERTICES);
+    normals =(CTMfloat*) ctm.GetFloatArray(CTM_NORMALS);
     triCount = ctm.GetInteger(CTM_TRIANGLE_COUNT);
     indices =(CTMuint*) ctm.GetIntegerArray(CTM_INDICES);
     qDebug()<<"CTM:"<<fn<<"vertCount:"<<vertCount<<"triCount:"<<triCount;
@@ -45,6 +47,7 @@ QDataStream &operator>>(QDataStream& s, CTMSpaceObject& o){
         s >> o.rotvel;
         s >> o.size;
         s >> o.filename;
+        o.load(o.filename);
     }
     return s;
 }
