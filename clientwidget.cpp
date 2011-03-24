@@ -127,7 +127,7 @@ void ClientWidget::paintGL()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
   //**************************************************************************************************STARS
-    glColor3f(1,1,1);
+    glColor3f(1,1,1);/*
     for (QList<QVector3D>::iterator i = stars.begin(); i != stars.end(); ++i)
     {
         if(i->z()<0){
@@ -138,15 +138,11 @@ void ClientWidget::paintGL()
             glVertex3f(i->x(),i->y(),i->z()+(float)ftmp);
             glEnd();
         }
-    }
+    }*/
 //**************************************************************************************************SCENE
-    float l[]={0.2,0.5,1,1};
+    float l[]={-1,1,1,1};
     lightingprogram.bind();
     glEnable(GL_DEPTH_TEST);
-    glBegin(GL_POINTS);
-    glColor4f(1,0,0,1);
-    glVertex3fv(l);
-    glEnd();
     glLightfv(GL_LIGHT0,GL_POSITION,l);
     glEnable(GL_LIGHTING);
     glColor4f(0.8,0.8,0.8,1);
@@ -156,8 +152,8 @@ void ClientWidget::paintGL()
               me.position.x(), me.position.y()+1.0f, me.position.z());
     glTranslatef(-0.1,0.2,0.5);
     glRotated(180,0,1,0);
-    glRotated(45,1,0,0);
-    glRotated(45,0,0,1);
+    glRotated(30,1,0,0);
+    glRotated(5,0,0,1);
     GLfloat whiteSpecularMaterial[] = {1.0, 1.0, 1.0};
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, whiteSpecularMaterial);
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS,128);
@@ -166,9 +162,14 @@ void ClientWidget::paintGL()
     gluLookAt(me.position.x(), me.position.y(),      me.position.z(),
               me.position.x(), me.position.y(),      me.position.z()+1.0f,
               me.position.x(), me.position.y()+1.0f, me.position.z());
-    glScaled(20,20,20);
+    glTranslatef(0.1,-0.2,0.3);
+    glRotated(-90,1,0,0);
+    glColor4f(0.6,0.4,0,1);
+    GLfloat bunnySpecularMaterial[] = {1, 0.8, 0.0};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, bunnySpecularMaterial);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS,128);
+    lightingprogram.release();//too many vertices... fragment light doesn't work here.
     bunny.render();
-    lightingprogram.release();
 //**************************************************************************************************HUD
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

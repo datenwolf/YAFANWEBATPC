@@ -1,11 +1,14 @@
 #include "ctmspaceobject.h"
-
+#include <QDebug>
 CTMSpaceObject::CTMSpaceObject()
 {
 }
 
 void CTMSpaceObject::render(){
-    glVertex3fv(vertices);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, vertices);
+    glDrawElements(GL_TRIANGLES,  triCount*3, GL_UNSIGNED_INT, indices);
+    glDisableClientState(GL_VERTEX_ARRAY);
 }
 void CTMSpaceObject::load(QString fn){
     filename=fn;
@@ -14,6 +17,7 @@ void CTMSpaceObject::load(QString fn){
     vertices =(CTMfloat*) ctm.GetFloatArray(CTM_VERTICES);
     triCount = ctm.GetInteger(CTM_TRIANGLE_COUNT);
     indices =(CTMuint*) ctm.GetIntegerArray(CTM_INDICES);
+    qDebug()<<"CTM:"<<fn<<"vertCount:"<<vertCount<<"triCount:"<<triCount;
 }
 
 QDataStream &operator<<(QDataStream& s, const CTMSpaceObject& o){
