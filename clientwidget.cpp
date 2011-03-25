@@ -88,6 +88,7 @@ void ClientWidget::initializeGL()
 #endif
     fpscalc();
     glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
     hudtex=bindTexture(hud,GL_TEXTURE_2D,GL_RGBA);
@@ -102,7 +103,7 @@ void ClientWidget::initializeGL()
                                             "}\n");
     lightingprogram.addShaderFromSourceFile(QGLShader::Fragment,"light.frag");
     lightingprogram.link();
-    lightingprogram.setUniformValue("MAX_LIGHTS",1);
+    lightingprogram.setUniformValue("MAX_LIGHTS",2);
 
     qDebug()<<ENCAPS(tr("gl init done"));
 }
@@ -140,10 +141,12 @@ void ClientWidget::paintGL()
         }
     }*/
 //**************************************************************************************************SCENE
-    float l[]={-1,1,1,1};
+    float l[]={-2,0,1,1};
+    glLightfv(GL_LIGHT0,GL_POSITION,l);
+    l[0]=-l[0];
+    glLightfv(GL_LIGHT1,GL_POSITION,l);
     lightingprogram.bind();
     glEnable(GL_DEPTH_TEST);
-    glLightfv(GL_LIGHT0,GL_POSITION,l);
     glEnable(GL_LIGHTING);
     glColor4f(0.8,0.8,0.8,1);
     glLoadIdentity();
@@ -168,8 +171,8 @@ void ClientWidget::paintGL()
     GLfloat bunnySpecularMaterial[] = {1, 0.8, 0.0};
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, bunnySpecularMaterial);
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS,128);
-    lightingprogram.release();//too many vertices... fragment light doesn't work here.
     bunny.render();
+    lightingprogram.release();
 //**************************************************************************************************HUD
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

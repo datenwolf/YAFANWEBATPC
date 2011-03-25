@@ -28,6 +28,32 @@ int i=0;
 
       finalColor += Iamb + Idiff + Ispec;
 //   }
+i++; ////////////////////////manually unrolled loop
+      L = normalize(gl_LightSource[i].position.xyz - v);
+      E = normalize(-v); // we are in Eye Coordinates, so EyePos is (0,0,0)
+      R = normalize(-reflect(L,N));
+
+      //calculate Ambient Term:
+      Iamb = gl_FrontLightProduct[i].ambient;
+
+      //calculate Diffuse Term:
+      Idiff = gl_FrontLightProduct[i].diffuse * max(dot(N,L), 0.0);
+      Idiff = clamp(Idiff, 0.0, 1.0);
+
+      // calculate Specular Term:
+      Ispec = gl_FrontLightProduct[i].specular
+             * pow(max(dot(R,E),0.0),0.3*gl_FrontMaterial.shininess);
+      Ispec = clamp(Ispec, 0.0, 1.0);
+
+      finalColor += Iamb + Idiff + Ispec;
+////////////////////////manually unrolled loop end
+
+
+
+
+
+
+
 
    // write Total Color:
    gl_FragColor = gl_FrontLightModelProduct.sceneColor + finalColor;

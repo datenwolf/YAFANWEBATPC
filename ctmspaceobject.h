@@ -13,6 +13,7 @@ public:
     CTMuint vertCount, triCount, * indices;
     CTMfloat * vertices, *normals;
     CTMimporter ctm;
+    void CalcNormals();
 };
 QDataStream &operator<<(QDataStream &, const CTMSpaceObject &);
 QDataStream &operator>>(QDataStream &, CTMSpaceObject &);
