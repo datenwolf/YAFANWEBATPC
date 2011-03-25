@@ -127,19 +127,6 @@ void ClientWidget::paintGL()
     gluPerspective(90,(float)width()/(float)height(),0.1,1000);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-  //**************************************************************************************************STARS
-    glColor3f(1,1,1);/*
-    for (QList<QVector3D>::iterator i = stars.begin(); i != stars.end(); ++i)
-    {
-        if(i->z()<0){
-            glBegin(GL_LINE);
-            glColor4f(1,1,1,1);
-            glVertex3f(i->x(),i->y(),i->z());
-            glColor4f(1,1,1,0);
-            glVertex3f(i->x(),i->y(),i->z()+(float)ftmp);
-            glEnd();
-        }
-    }*/
 //**************************************************************************************************SCENE
     float l[]={-2,0,1,1};
     glLightfv(GL_LIGHT0,GL_POSITION,l);
@@ -167,10 +154,10 @@ void ClientWidget::paintGL()
               me.position.x(), me.position.y()+1.0f, me.position.z());
     glTranslatef(0.1,-0.2,0.3);
     glRotated(-90,1,0,0);
-    glColor4f(0.6,0.4,0,1);
-    GLfloat bunnySpecularMaterial[] = {1, 0.8, 0.0};
+    glColor4f(0.8,0.8,0.8,1);
+    GLfloat bunnySpecularMaterial[] = {1, 1, 1};
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, bunnySpecularMaterial);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS,128);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS,10^5);
     bunny.render();
     lightingprogram.release();
 //**************************************************************************************************HUD
@@ -225,11 +212,21 @@ void ClientWidget::fpscalc()
 }
 void ClientWidget::keyReleaseEvent(QKeyEvent *e){
     qDebug()<<ENCAPS(tr("keyReleaseEvent() with key: "))<<e->key();
-    if(e->key()==Qt::Key_Escape && e->modifiers() == Qt::ControlModifier){
-        qApp->exit();
-    }else if(e->key()==Qt::Key_Escape){
-        qDebug()<<ENCAPS(tr("disconnecting from server..."));
-        emit disconnectFromServer();
+    switch(e->key()){
+    case Qt::Key_Plus:
+        me.position.setZ(me.position.z()+1);
+        break;
+    case Qt::Key_Minus:
+        me.position.setZ(me.position.z()-1);
+        break;
+    case Qt::Key_Escape:
+        if(e->modifiers() == Qt::ControlModifier){
+            qApp->exit();
+        }else{
+            qDebug()<<ENCAPS(tr("disconnecting from server..."));
+            emit disconnectFromServer();
+        }
+        break;
     }
 }
 

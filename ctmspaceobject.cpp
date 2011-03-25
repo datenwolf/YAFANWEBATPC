@@ -7,9 +7,11 @@ CTMSpaceObject::CTMSpaceObject()
 
 void CTMSpaceObject::render(){
     glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, vertices);
     glNormalPointer(GL_FLOAT,0,normals);
     glDrawElements(GL_TRIANGLES,  triCount*3, GL_UNSIGNED_INT, indices);
+    glDisableClientState(GL_NORMAL_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 void CTMSpaceObject::load(QString fn){
@@ -19,12 +21,11 @@ void CTMSpaceObject::load(QString fn){
     triCount = ctm.GetInteger(CTM_TRIANGLE_COUNT);
     indices =(CTMuint*) ctm.GetIntegerArray(CTM_INDICES);
     vertices =(CTMfloat*) ctm.GetFloatArray(CTM_VERTICES);
-    normals = (CTMfloat*) malloc(sizeof(CTMfloat)*triCount+2);
     bool nc=false;
     if((bool) ctm.GetInteger(CTM_HAS_NORMALS)){
-        free(normals);
         normals =(CTMfloat*) ctm.GetFloatArray(CTM_NORMALS);
     }else{
+        normals = (CTMfloat*) malloc(triCount*sizeof(CTMfloat)+5);
         CalcNormals();
         nc=true;
     }
