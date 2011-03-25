@@ -31,7 +31,7 @@ void CTMSpaceObject::load(QString fn){
     }
     qDebug()<<"CTM:"<<fn<<"vertCount:"<<vertCount<<"triCount:"<<triCount<<"normalCalc:"<<nc;
 }
-void CTMSpaceObject::CalcNormals()
+void CTMSpaceObject::CalcNormals(float s)
  {
     for(int i=0;i<triCount;i+=3){
         float p1_x=vertices[indices[i       ]       ];
@@ -60,6 +60,7 @@ void CTMSpaceObject::CalcNormals()
 
         float vLen = sqrt( (normal_x * normal_x) + (normal_y * normal_y) + (normal_z * normal_z) );
 
+        vLen *= s;
         normal_x /= vLen;
         normal_y /= vLen;
         normal_z /= vLen;

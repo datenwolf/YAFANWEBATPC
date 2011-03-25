@@ -92,7 +92,8 @@ void ClientWidget::initializeGL()
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
     hudtex=bindTexture(hud,GL_TEXTURE_2D,GL_RGBA);
-    bunny.load("bunny.ctm");
+    bunny.load("bunny.ctm");    bunny.CalcNormals(0.05);
+
     lightingprogram.addShaderFromSourceCode(QGLShader::Vertex,
                                             "varying vec3 N;\n"
                                             "varying vec3 v;\n"
@@ -152,9 +153,9 @@ void ClientWidget::paintGL()
     gluLookAt(me.position.x(), me.position.y(),      me.position.z(),
               me.position.x(), me.position.y(),      me.position.z()+1.0f,
               me.position.x(), me.position.y()+1.0f, me.position.z());
-    glTranslatef(0.1,-0.2,0.3);
-    glRotated(-90,1,0,0);
+    glTranslatef(0.1,-0.2,1);
     glColor4f(0.8,0.8,0.8,1);
+    glScaled(0.05,0.05,0.05);
     GLfloat bunnySpecularMaterial[] = {1, 1, 1};
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, bunnySpecularMaterial);
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS,10^5);
