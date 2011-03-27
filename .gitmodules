@@ -1,0 +1,3 @@
+[submodule "openctm"]
+	path = openctm
+	url = https://github.com/keine-ahnung/openctm.git
