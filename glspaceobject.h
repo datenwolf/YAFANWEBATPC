@@ -3,7 +3,6 @@
 #include "spaceobject.h"
 class GLSpaceObject : public SpaceObject
 {
-    Q_OBJECT
 public:
     GLSpaceObject();
     void render();

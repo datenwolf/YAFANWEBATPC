@@ -16,16 +16,16 @@ public:
     int mode;
 
 signals:
-    void messageFromServer(QDataStream& message);//client
+    void messageFromServer(QByteArray message);//client
     void serverDisconnected();
-    void messageFromClient(QDataStream& message,QString client);//server
+    void messageFromClient(QByteArray message,QString client);//server
     void clientLogIn(QString client);
     void clientDisconnection(QString client);
 public slots:
     virtual void logInToServer(QString server){}//client
-    virtual void sendToServer(QDataStream& message){}
+    virtual void sendToServer(QByteArray message){}
     virtual void disconnectFromServer(){}
-    virtual void sendToClient(QDataStream& message,QString client){}//server
+    virtual void sendToClient(QByteArray message,QString client){}//server
     virtual void disconnectClient(QString client){}
 
 };

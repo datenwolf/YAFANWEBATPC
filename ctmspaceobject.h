@@ -4,10 +4,9 @@
 #include <openctm.h>
 class CTMSpaceObject : public GLSpaceObject
 {
-    Q_OBJECT
 public:
     CTMSpaceObject();
-    void load(QString fn);
+    void load(QString fn,float s=1);
     void render();
     QString filename;
     CTMuint vertCount, triCount, * indices;

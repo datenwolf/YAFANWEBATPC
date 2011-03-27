@@ -4,16 +4,15 @@
 #include <QObject>
 #include <QVector3D>
 #include <GL/gl.h>
-class SpaceObject : public QObject
+class SpaceObject
 {
-    Q_OBJECT
 public:
     explicit SpaceObject(QObject *parent = 0);
     qint32 objtype;
     qint32 flags;
     QVector3D position;
     QVector3D velocity;
-    QVector3D rotation; //right hand rule rotation around axes.
+    QVector3D rotation;
     QVector3D rotvel;
     qint32 size;
     GLfloat* posfv(){ float f[]={position.x(),position.y(),position.z()}; return f; }

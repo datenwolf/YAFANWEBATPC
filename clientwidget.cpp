@@ -75,7 +75,7 @@ void ClientWidget::initializeGL()
     glShadeModel(GL_SMOOTH);						// Enables Smooth Shading
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
-    timer->start(15);
+    timer->start(20);
     QTimer *timer2 = new QTimer(this);
     connect(timer2, SIGNAL(timeout()), this, SLOT(fpscalc()));
     timer2->start(500);
@@ -92,7 +92,7 @@ void ClientWidget::initializeGL()
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
     hudtex=bindTexture(hud,GL_TEXTURE_2D,GL_RGBA);
-    bunny.load("bunny.ctm");    bunny.CalcNormals(0.05);
+    bunny.load("bunny.ctm",0.05);
 
     lightingprogram.addShaderFromSourceCode(QGLShader::Vertex,
                                             "varying vec3 N;\n"
@@ -156,6 +156,7 @@ void ClientWidget::paintGL()
     glTranslatef(0.1,-0.2,1);
     glColor4f(0.8,0.8,0.8,1);
     glScaled(0.05,0.05,0.05);
+    glRotated(90,1,0,0);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, whiteSpecularMaterial);
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS,128);
     bunny.render();
@@ -188,7 +189,7 @@ void ClientWidget::animate()
 {
     qDebug()<<ENCAPS(tr("animate() start"));
     QDateTime now=QDateTime::currentDateTime();
-    QString h=QString::number(now.time().hour());
+    QString h=QString::number(now.  time().hour());
     QString m=QString::number(now.time().minute());
     if(now.time().hour()<10) h.prepend("0");
     if(now.time().minute()<10) m.prepend("0");
@@ -212,12 +213,21 @@ void ClientWidget::fpscalc()
 }
 void ClientWidget::keyReleaseEvent(QKeyEvent *e){
     qDebug()<<ENCAPS(tr("keyReleaseEvent() with key: "))<<e->key();
+    QByteArray qba;
+    QDataStream stream(&qba,QIODevice::WriteOnly);
+    bool send=false;
     switch(e->key()){
     case Qt::Key_Plus:
-        me.position.setZ(me.position.z()+1);
+        stream <<QString("SET_VELOCITY");
+        stream << 0;
+        stream << me.velocity+QVector3D(0,0,0.05f);
+        send=true;
         break;
     case Qt::Key_Minus:
-        me.position.setZ(me.position.z()-1);
+        stream <<QString("SET_VELOCITY");
+        stream << 0;
+        stream << me.velocity-QVector3D(0,0,0.05f);
+        send=true;
         break;
     case Qt::Key_Escape:
         if(e->modifiers() == Qt::ControlModifier){
@@ -228,9 +238,25 @@ void ClientWidget::keyReleaseEvent(QKeyEvent *e){
         }
         break;
     }
+    if(send)
+        emit sendToServer(qba);
 }
 
 void ClientWidget::serverDisconnected(){
     qDebug()<<ENCAPS(tr("server disconnected."));
     qApp->exit();
+}
+void ClientWidget::messageFromServer(QByteArray message){
+    qDebug()<<ENCAPS(tr("incoming"))<<message.toBase64();
+    QString header;
+    QDataStream stream(message);
+    stream >> header;
+    qDebug()<<header;
+    if(0==header.compare("SIMULATION_UPDATE_DATA")){
+        qDebug()<<ENCAPS(tr("Got simulation data!"));
+        int size,i;
+        stream >> size;
+        stream >> i;
+        stream >> me;
+    }
 }

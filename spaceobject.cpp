@@ -1,7 +1,6 @@
 #include "spaceobject.h"
 
-SpaceObject::SpaceObject(QObject *parent) :
-    QObject(parent)
+SpaceObject::SpaceObject(QObject *parent)
 {
 }
 QDataStream &operator<<(QDataStream& s, const SpaceObject& o){

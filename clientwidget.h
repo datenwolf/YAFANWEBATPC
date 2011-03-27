@@ -61,11 +61,11 @@ protected slots:
      void animate();
      void fpscalc();
      void keyReleaseEvent(QKeyEvent *);
-     void messageFromServer(QDataStream& message){}
+     void messageFromServer(QByteArray message);
      void serverDisconnected();
 signals:
      void logInToServer(QString server);
-     void sendToServer(QDataStream& message);
+     void sendToServer(QByteArray message);
      void disconnectFromServer();
 
 };
