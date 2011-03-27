@@ -14,7 +14,7 @@ void CTMSpaceObject::render(){
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
 }
-void CTMSpaceObject::load(QString fn){
+void CTMSpaceObject::load(QString fn, float s){
     filename=fn;
     ctm.Load(filename.toUtf8().data());
     vertCount = ctm.GetInteger(CTM_VERTEX_COUNT);
@@ -22,11 +22,11 @@ void CTMSpaceObject::load(QString fn){
     indices =(CTMuint*) ctm.GetIntegerArray(CTM_INDICES);
     vertices =(CTMfloat*) ctm.GetFloatArray(CTM_VERTICES);
     bool nc=false;
-    if((bool) ctm.GetInteger(CTM_HAS_NORMALS)){
+    if(ctm.GetInteger(CTM_HAS_NORMALS)){
         normals =(CTMfloat*) ctm.GetFloatArray(CTM_NORMALS);
     }else{
         normals = (CTMfloat*) malloc(triCount*sizeof(CTMfloat)+5);
-        CalcNormals();
+        CalcNormals(s);
         nc=true;
     }
     qDebug()<<"CTM:"<<fn<<"vertCount:"<<vertCount<<"triCount:"<<triCount<<"normalCalc:"<<nc;

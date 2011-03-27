@@ -10,7 +10,7 @@ void LoopbackConnection::logInToServer(QString server){
     emit clientLogIn("loop");
 }
 
-void LoopbackConnection::sendToServer(QDataStream& message){
+void LoopbackConnection::sendToServer(QByteArray message){
     emit messageFromClient(message,"loop");
 }
 
@@ -21,7 +21,7 @@ void LoopbackConnection::disconnectFromServer(){
 
 
 //server
-void LoopbackConnection::sendToClient(QDataStream& message,QString client){
+void LoopbackConnection::sendToClient(QByteArray message,QString client){
     emit messageFromServer(message);
 }
 
