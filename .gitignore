@@ -4,3 +4,4 @@ Makefile
 yafanwebatpc
 *.qm
 docs/YAFANWEBATPC.wiki/
+start.sh
