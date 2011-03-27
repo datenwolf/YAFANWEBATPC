@@ -156,9 +156,8 @@ void ClientWidget::paintGL()
     glTranslatef(0.1,-0.2,1);
     glColor4f(0.8,0.8,0.8,1);
     glScaled(0.05,0.05,0.05);
-    GLfloat bunnySpecularMaterial[] = {1, 1, 1};
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, bunnySpecularMaterial);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS,10^5);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, whiteSpecularMaterial);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS,128);
     bunny.render();
     lightingprogram.release();
 //**************************************************************************************************HUD
