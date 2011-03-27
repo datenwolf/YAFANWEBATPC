@@ -140,7 +140,7 @@ void ClientWidget::paintGL()
     glLoadIdentity();
     gluLookAt(me.position.x(), me.position.y(),      me.position.z(),
               me.position.x(), me.position.y(),      me.position.z()+1.0f,
-              me.position.x(), me.position.y()+1.0f, me.position.z());
+              0, 1, 0);
     glTranslatef(-0.1,0.2,0.5);
     glRotated(180,0,1,0);
     glRotated(30,1,0,0);
@@ -152,7 +152,7 @@ void ClientWidget::paintGL()
     glLoadIdentity();
     gluLookAt(me.position.x(), me.position.y(),      me.position.z(),
               me.position.x(), me.position.y(),      me.position.z()+1.0f,
-              me.position.x(), me.position.y()+1.0f, me.position.z());
+              0, 1, 0);
     glTranslatef(0.1,-0.2,1);
     glColor4f(0.8,0.8,0.8,1);
     glScaled(0.05,0.05,0.05);
@@ -217,13 +217,13 @@ void ClientWidget::keyReleaseEvent(QKeyEvent *e){
     QDataStream stream(&qba,QIODevice::WriteOnly);
     bool send=false;
     switch(e->key()){
-    case Qt::Key_Plus:
+    case Qt::Key_PageUp:
         stream <<QString("SET_VELOCITY");
         stream << 0;
         stream << me.velocity+QVector3D(0,0,0.01f);
         send=true;
         break;
-    case Qt::Key_Minus:
+    case Qt::Key_PageDown:
         stream <<QString("SET_VELOCITY");
         stream << 0;
         stream << me.velocity-QVector3D(0,0,0.01f);
