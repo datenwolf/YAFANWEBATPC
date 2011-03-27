@@ -220,13 +220,37 @@ void ClientWidget::keyReleaseEvent(QKeyEvent *e){
     case Qt::Key_Plus:
         stream <<QString("SET_VELOCITY");
         stream << 0;
-        stream << me.velocity+QVector3D(0,0,0.05f);
+        stream << me.velocity+QVector3D(0,0,0.01f);
         send=true;
         break;
     case Qt::Key_Minus:
         stream <<QString("SET_VELOCITY");
         stream << 0;
-        stream << me.velocity-QVector3D(0,0,0.05f);
+        stream << me.velocity-QVector3D(0,0,0.01f);
+        send=true;
+        break;
+    case Qt::Key_Left:
+        stream <<QString("SET_VELOCITY");
+        stream << 0;
+        stream << me.velocity+QVector3D(0.01f,0,0);
+        send=true;
+        break;
+    case Qt::Key_Right:
+        stream <<QString("SET_VELOCITY");
+        stream << 0;
+        stream << me.velocity-QVector3D(0.01f,0,0);
+        send=true;
+        break;
+    case Qt::Key_Up:
+        stream <<QString("SET_VELOCITY");
+        stream << 0;
+        stream << me.velocity+QVector3D(0,0.01f,0);
+        send=true;
+        break;
+    case Qt::Key_Down:
+        stream <<QString("SET_VELOCITY");
+        stream << 0;
+        stream << me.velocity-QVector3D(0,0.01f,0);
         send=true;
         break;
     case Qt::Key_Escape:

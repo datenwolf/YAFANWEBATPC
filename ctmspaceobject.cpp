@@ -75,7 +75,7 @@ QDataStream &operator<<(QDataStream& s, const CTMSpaceObject& o){
     s << o.flags;
     s << o.position;
     s << o.velocity;
-    s << o.rotation; //right hand rule rotation around axes.
+    s << o.rotation;
     s << o.rotvel;
     s << o.size;
     s << o.filename;
