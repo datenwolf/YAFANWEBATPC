@@ -13,18 +13,9 @@ ClientWidget::ClientWidget(QGLWidget *parent)
     qDebug()<<ENCAPS(tr("widget init"));
     frames=0;ftmp=0;
     hud.load("hud.png");
-    emptybm.clear();
     teapot.size=F2I(0.1f);
     qsrand(0);
-    for (int i=0;i<6000;i++)
-    {
-        float r=999;
-        float theta=(float)(qrand()%628318)/100000.0f;
-        float phi=(float)(qrand()%628318)/100000.0f;
-        QVector3D v(r*sin(theta)*cos(phi), r*sin(theta)*sin(phi), r*cos(theta));
-        stars.append(v);
-        qDebug()<<v;
-    }
+    emit logInToServer("127.0.0.1");
 }
 
 void ClientWidget::renderFont(FTPixmapFont* f,QString s, float x,float y,int lr,int tb){

@@ -1,24 +1,23 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include <QThread>
+#include <QObject>
 #include <QDebug>
 #include "spaceobject.h"
 #include <QList>
 #include <QHash>
 
-class Server : public QThread
+class Server : public QObject
 {
     Q_OBJECT
 public:
     explicit Server(QObject *parent = 0);
-    void run();
     QHash<QString,QList<SpaceObject> > spaceObjects;
 
 public slots:
     void messageFromClient(QByteArray message,QString client);
-    void clientLogIn(QString client){}
-    void clientDisconnection(QString client){ qDebug()<<"Client"<<client<<"disconnected"; exit(); emit disconnectClient(client);}
+    void clientLogIn(QString client);
+    void clientDisconnection(QString client);
     void simulate();
 signals:
     void sendToClient(QByteArray message,QString client);

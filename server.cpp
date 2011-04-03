@@ -5,19 +5,11 @@
 #include "global_defines.h"
 
 Server::Server(QObject *parent) :
-    QThread(parent)
+    QObject(parent)
 {
-    QList<SpaceObject> l;
-    l.append(SpaceObject());
-    spaceObjects[QString("loop")]=l;
-}
-void Server::run(){
     QTimer *timer = new QTimer();
-    connect(timer, SIGNAL(timeout()), this, SLOT(simulate()),Qt::DirectConnection);
+    connect(timer, SIGNAL(timeout()), this, SLOT(simulate()));
     timer->start(100);
-    exec();
-    disconnect(timer,0,0,0);
-    delete(timer);
 }
 
 void Server::simulate(){
@@ -52,4 +44,15 @@ void Server::messageFromClient(QByteArray message,QString client){
         stream >> i;
         stream >> spaceObjects[client][i].velocity;
     }
+}
+void Server::clientLogIn(QString client){
+    qDebug()<<"Client"<<client<<"connected";
+    QList<SpaceObject> l;
+    l.append(SpaceObject());
+    spaceObjects[client]=l;
+}
+void Server::clientDisconnection(QString client){
+    qDebug()<<"Client"<<client<<"disconnected";
+    spaceObjects.remove(client);
+    emit disconnectClient(client);
 }

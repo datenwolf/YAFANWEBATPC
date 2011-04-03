@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui opengl
+QT       += core gui opengl network
 
 TARGET = yafanwebatpc
 TEMPLATE = app
@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     connection.cpp \
     loopbackconnection.cpp \
     glspaceobject.cpp \
-    ctmspaceobject.cpp
+    ctmspaceobject.cpp \
+    udpconnection.cpp
 
 HEADERS  += clientwidget.h \
     spaceobject.h \
@@ -26,7 +27,8 @@ HEADERS  += clientwidget.h \
     connection.h \
     loopbackconnection.h \
     glspaceobject.h \
-    ctmspaceobject.h
+    ctmspaceobject.h \
+    udpconnection.h
 INCLUDEPATH += /usr/include/freetype2
 CONFIG(debug, debug|release) {
 # here comes debug specific statements

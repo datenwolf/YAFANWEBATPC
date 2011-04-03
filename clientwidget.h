@@ -52,10 +52,8 @@ private:
      QString clock;
      QImage hud;
      GLuint hudtex;
-     QBitmap emptybm;
      GLSpaceObject teapot;
      CTMSpaceObject bunny;
-     QList<QVector3D> stars;
      FTPixmapFont* font;
 protected slots:
      void animate();
