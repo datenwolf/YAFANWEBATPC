@@ -6,7 +6,7 @@
 #include "global_defines.h"
 #include <QApplication>
 
-#define BASEPORT 40959
+#define BASEPORT 12345
 //base port number defined by following bash command:
 //  echo yafanwebatpc | sha1sum | cut -d" " -f 1 | tr -d "[:alpha:]" | cut -c 1-5
 
@@ -28,8 +28,8 @@ signals:
     void clientDisconnection(QString client);
 public slots:
     void logInToServer(QString server);//client
-    void sendToServer(QByteArray message);
-    void disconnectFromServer();
+    void sendToServer(QByteArray message, QString server);
+    void disconnectFromServer(QString server);
     void sendToClient(QByteArray message,QString client);//server
     void disconnectClient(QString client);
     void readPendingDatagrams();

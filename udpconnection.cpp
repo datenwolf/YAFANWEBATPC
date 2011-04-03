@@ -12,6 +12,7 @@ UdpConnection::UdpConnection(int mode,Connection *parent):
             qApp->exit();
         }
         break;
+
     case CONNECTION_MODE_CLIENT:
         qDebug()<<"CLIENT bind at"<<BASEPORT+1;
         if(!udpSocket->bind(BASEPORT+1)){
@@ -19,14 +20,17 @@ UdpConnection::UdpConnection(int mode,Connection *parent):
             qApp->exit();
         }
         break;
+
     default:
         qDebug()<<ENCAPS(tr("UdpConnection constructor: wrong mode: "))<<mode;
         qApp->exit();
         break;
     }
+
     connect(udpSocket, SIGNAL(readyRead()),
             this, SLOT(readPendingDatagrams()));
 }
+
 void UdpConnection::readPendingDatagrams()
  {
      while (udpSocket->hasPendingDatagrams()) {
@@ -42,6 +46,7 @@ void UdpConnection::readPendingDatagrams()
          case CONNECTION_MODE_CLIENT:
              cparse(datagram,sender);
              break;
+
          case CONNECTION_MODE_SERVER:
              sparse(datagram,sender);
              break;
@@ -53,10 +58,10 @@ void UdpConnection::readPendingDatagrams()
 void UdpConnection::cparse(QByteArray datagram,QHostAddress sender){
     qDebug()<<"cparse"<<datagram.toBase64()<<sender;
     QString tmp(datagram.split(':').at(0));
-    if(0==tmp.compare("DISCONNECT")){
+    if( 0 == tmp.compare("DISCONNECT") ) {
         udpSocket->close();
         emit serverDisconnected();
-    }else if(0==tmp.compare("MSG")){
+    } else if( 0 == tmp.compare("MSG") ) {
         emit messageFromServer(datagram.mid(4));
     }
 }
@@ -67,11 +72,12 @@ void UdpConnection::cparse(QByteArray datagram,QHostAddress sender){
 void UdpConnection::sparse(QByteArray datagram,QHostAddress sender){
     qDebug()<<"sparse"<<datagram.toBase64()<<sender;
     QString tmp(datagram.split(':').at(0));
-    if(0==tmp.compare("DISCONNECT")){
+
+    if( 0 == tmp.compare("DISCONNECT") ) {
         emit clientDisconnection(sender.toString());
-    }else if(0==tmp.compare("MSG")){
+    } else if( 0 == tmp.compare("MSG") ) {
         emit messageFromClient(datagram.mid(4),sender.toString());
-    }else if(0==tmp.compare("LOGIN")){
+    } else if( 0 == tmp.compare("LOGIN") ) {
         emit clientLogIn(sender.toString());
     }
 }
@@ -80,18 +86,17 @@ void UdpConnection::sparse(QByteArray datagram,QHostAddress sender){
 //client
 void UdpConnection::logInToServer(QString server){
     qDebug()<<"logInToServer"<<server;
-    udpSocket->connectToHost((const QString)server, BASEPORT,QUdpSocket::ReadWrite);
-    udpSocket->write(QByteArray("LOGIN"));
+    udpSocket->writeDatagram(QByteArray("LOGIN"), QHostAddress(server), BASEPORT);
 }
 
-void UdpConnection::sendToServer(QByteArray message){
+void UdpConnection::sendToServer(QByteArray message, QString server){
     qDebug()<<"sendToServer"<<message.toBase64();
-    udpSocket->write(message.prepend("MSG:"));
+    udpSocket->writeDatagram(message.prepend("MSG:"), QHostAddress(server), BASEPORT);
 }
 
-void UdpConnection::disconnectFromServer(){
+void UdpConnection::disconnectFromServer(QString server){
     qDebug()<<"disconnectFromServer";
-    udpSocket->write(QByteArray("DISCONNECT"));
+    udpSocket->writeDatagram(QByteArray("DISCONNECT"), QHostAddress(server), BASEPORT);
 }
 
 
