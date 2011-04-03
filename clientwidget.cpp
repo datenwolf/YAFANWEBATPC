@@ -15,7 +15,6 @@ ClientWidget::ClientWidget(QGLWidget *parent)
     hud.load("hud.png");
     teapot.size=F2I(0.1f);
     qsrand(0);
-    emit logInToServer("127.0.0.1");
 }
 
 void ClientWidget::renderFont(FTPixmapFont* f,QString s, float x,float y,int lr,int tb){
@@ -98,6 +97,7 @@ void ClientWidget::initializeGL()
     lightingprogram.setUniformValue("MAX_LIGHTS",2);
 
     qDebug()<<ENCAPS(tr("gl init done"));
+    emit logInToServer("127.0.0.1");
 }
 
 void ClientWidget::resizeGL(int w, int h)
